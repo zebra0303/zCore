@@ -1,8 +1,7 @@
 {
-  "name": "@zebra/zcommon",
+  "name": "@zebra/core",
   "version": "0.1.0",
   "description": "Shared utilities for BigStone and zlog projects",
-  "private": true,
   "type": "module",
   "exports": {
     ".": {
@@ -22,6 +21,7 @@
     "dist"
   ],
   "scripts": {
+    "prepare": "tsup",
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest run",
@@ -35,6 +35,8 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.3.0",
+    "tsup": "^8.5.1",
+    "typescript": "~5.9.3",
     "uuidv7": "^1.0.2"
   },
   "devDependencies": {
@@ -45,8 +47,6 @@
     "prettier": "^3.8.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "tsup": "^8.5.1",
-    "typescript": "~5.9.3",
     "vitest": "^4.0.18",
     "zustand": "^5.0.11"
   },
