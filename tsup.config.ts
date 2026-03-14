@@ -5,7 +5,7 @@ export default defineConfig([
     entry: {
       "shared/index": "src/shared/index.ts",
     },
-    format: ["esm"],
+    format: ["esm", "cjs"],
     dts: true,
     sourcemap: true,
     clean: true,
@@ -15,7 +15,7 @@ export default defineConfig([
     entry: {
       "client/index": "src/client/index.ts",
     },
-    format: ["esm"],
+    format: ["esm", "cjs"],
     dts: true,
     sourcemap: true,
     external: ["react", "react-dom", "zustand", "lucide-react"],
@@ -25,7 +25,7 @@ export default defineConfig([
     entry: {
       "server/index": "src/server/index.ts",
     },
-    format: ["esm"],
+    format: ["esm", "cjs"],
     dts: true,
     sourcemap: true,
     outDir: "dist",

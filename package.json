@@ -6,14 +6,17 @@
   "exports": {
     ".": {
       "import": "./dist/shared/index.js",
+      "require": "./dist/shared/index.cjs",
       "types": "./dist/shared/index.d.ts"
     },
     "./client": {
       "import": "./dist/client/index.js",
+      "require": "./dist/client/index.cjs",
       "types": "./dist/client/index.d.ts"
     },
     "./server": {
       "import": "./dist/server/index.js",
+      "require": "./dist/server/index.cjs",
       "types": "./dist/server/index.d.ts"
     }
   },
