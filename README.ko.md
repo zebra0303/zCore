@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@zebra/core.svg)](https://www.npmjs.com/package/@zebra/core)
 
-BigStone 및 zlog 프로젝트를 위한 다목적 공통 유틸리티 라이브러리입니다. 가볍고, 프레임워크에 종속되지 않는 설계를 지향하며, 다양한 환경에서 높은 재사용성을 제공합니다.
+BigStone, zlog, zGo 프로젝트를 위한 다목적 공통 유틸리티 라이브러리입니다. 가볍고, 프레임워크에 종속되지 않는 설계를 지향하며, 다양한 환경에서 높은 재사용성을 제공합니다.
 
 [🇬🇧 English README](./README.md)
 
@@ -93,7 +93,14 @@ npm run test
 
 # 린트 실행
 npm run lint
+
+# 코드 포맷팅
+npm run format
 ```
+
+### 테스트 커버리지
+
+22개의 테스트 스위트, 176개의 테스트 케이스로 공유 유틸리티, UI 컴포넌트, 스토어, API 클라이언트를 검증합니다.
 
 ## 라이선스
 

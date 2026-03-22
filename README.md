@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@zebra/core.svg)](https://www.npmjs.com/package/@zebra/core)
 
-A multi-purpose utility library providing a shared foundation for the BigStone and zlog projects. It is designed to be lightweight, framework-agnostic where possible, and highly reusable across different environments.
+A multi-purpose utility library providing a shared foundation for the BigStone, zlog, and zGo projects. It is designed to be lightweight, framework-agnostic where possible, and highly reusable across different environments.
 
 [🇰🇷 한국어 README](./README.ko.md)
 
@@ -93,7 +93,14 @@ npm run test
 
 # Run linting
 npm run lint
+
+# Format code
+npm run format
 ```
+
+### Test Coverage
+
+22 test suites covering 176 tests across shared utilities, UI components, stores, and API client.
 
 ## License
 
