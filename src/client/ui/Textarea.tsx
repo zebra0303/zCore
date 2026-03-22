@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../../shared/cn";
+import { cn } from "../../shared/cn.js";
 
 export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 

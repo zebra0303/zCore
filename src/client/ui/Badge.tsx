@@ -1,7 +1,8 @@
 import React from "react";
-import { cn } from "../../shared/cn";
+import { cn } from "../../shared/cn.js";
 
-export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
+// refactor: use span for semantic inline element
+export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: "default" | "secondary" | "outline" | "destructive";
 }
 
@@ -11,7 +12,7 @@ export function Badge({
   ...props
 }: BadgeProps) {
   return (
-    <div
+    <span
       className={cn(
         "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
         {

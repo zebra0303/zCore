@@ -1,7 +1,7 @@
 import React from "react";
 import { AlertTriangle } from "lucide-react";
-import { Button } from "./Button";
-import { cn } from "../../shared/cn";
+import { Button } from "./Button.js";
+import { cn } from "../../shared/cn.js";
 
 export interface ConfirmModalProps {
   isOpen: boolean;
@@ -40,8 +40,14 @@ export function ConfirmModal({
     info: "default" as const,
   };
 
+  // refactor: added role and aria-label for A11y overlay
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirm-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
+    >
       <div
         className={cn(
           "bg-card text-card-foreground rounded-xl shadow-lg border w-full max-w-sm overflow-hidden",
@@ -54,7 +60,12 @@ export function ConfirmModal({
             <div className={`p-2 rounded-full ${variantStyles[variant]}`}>
               <AlertTriangle className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
+            <h3
+              id="confirm-modal-title"
+              className="text-lg font-semibold tracking-tight"
+            >
+              {title}
+            </h3>
           </div>
           <div className="text-sm text-muted-foreground mb-6 leading-relaxed">
             {message}
