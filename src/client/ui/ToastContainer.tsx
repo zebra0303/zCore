@@ -59,7 +59,9 @@ export function ToastContainer({
             )}
             role="alert"
           >
-            <Icon className={cn("h-5 w-5 shrink-0", iconColorMap[toast.type])} />
+            <Icon
+              className={cn("h-5 w-5 shrink-0", iconColorMap[toast.type])}
+            />
             <p className="flex-1 text-sm font-medium text-gray-900 dark:text-gray-100">
               {toast.message}
             </p>

@@ -83,9 +83,7 @@ describe("ApiClient", () => {
   });
 
   it("throws on error response with parsed message", async () => {
-    mockFetch.mockReturnValue(
-      errorResponse(400, { error: "Invalid input" }),
-    );
+    mockFetch.mockReturnValue(errorResponse(400, { error: "Invalid input" }));
     const api = new ApiClient();
     await expect(api.get("/fail")).rejects.toThrow("Invalid input");
   });

@@ -91,9 +91,7 @@ describe("handleApiError", () => {
 
   it("ignores empty error string in JSON body", async () => {
     const res = mockResponse(400, { error: "  " });
-    await expect(
-      handleApiError(res, "Default message"),
-    ).rejects.toMatchObject({
+    await expect(handleApiError(res, "Default message")).rejects.toMatchObject({
       message: "Default message",
     });
   });

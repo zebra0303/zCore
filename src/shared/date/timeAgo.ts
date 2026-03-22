@@ -23,11 +23,7 @@ const DIVISIONS: { amount: number; name: Intl.RelativeTimeFormatUnit }[] = [
  * @param locale - BCP 47 locale or short code ("en", "ko")
  * @param now - Current time in ms (defaults to Date.now(), injectable for testing)
  */
-export function timeAgo(
-  dateStr: string,
-  locale = "en",
-  now?: number,
-): string {
+export function timeAgo(dateStr: string, locale = "en", now?: number): string {
   const resolved = LOCALE_MAP[locale] ?? locale;
   const rtf = new Intl.RelativeTimeFormat(resolved, { numeric: "auto" });
   const date = new Date(dateStr);

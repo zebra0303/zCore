@@ -77,9 +77,7 @@ describe("stripMarkdown", () => {
   });
 
   it("removes table rows", () => {
-    expect(stripMarkdown("| Col1 | Col2 |\n| --- | --- |\n| A | B |")).toBe(
-      "",
-    );
+    expect(stripMarkdown("| Col1 | Col2 |\n| --- | --- |\n| A | B |")).toBe("");
   });
 
   it("normalizes whitespace", () => {

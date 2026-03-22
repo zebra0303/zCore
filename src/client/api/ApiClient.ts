@@ -7,6 +7,10 @@ export interface ApiClientOptions {
   onUnauthorized?: (path: string) => void;
   /** Credentials mode for fetch (default: "include") */
   credentials?: RequestCredentials;
+  /** Number of retry attempts for 5xx or network errors (default: 0) */
+  retries?: number;
+  /** Base delay in milliseconds between retries using exponential backoff (default: 1000) */
+  retryDelay?: number;
 }
 
 /**
@@ -20,6 +24,7 @@ export interface ApiClientOptions {
  *     return token ? { Authorization: `Bearer ${token}` } : {};
  *   },
  *   onUnauthorized: () => window.location.href = "/login",
+ *   retries: 3, // Automatically retry failed requests (5xx)
  * });
  */
 export class ApiClient {
@@ -27,12 +32,16 @@ export class ApiClient {
   private getAuthHeaders: () => Record<string, string>;
   private onUnauthorized: (path: string) => void;
   private credentials: RequestCredentials;
+  private retries: number;
+  private retryDelay: number;
 
   constructor(options: ApiClientOptions = {}) {
     this.baseUrl = options.baseUrl ?? "/api";
     this.getAuthHeaders = options.getAuthHeaders ?? (() => ({}));
     this.onUnauthorized = options.onUnauthorized ?? (() => {});
     this.credentials = options.credentials ?? "include";
+    this.retries = options.retries ?? 0;
+    this.retryDelay = options.retryDelay ?? 1000;
   }
 
   /** Extract error message from a failed response. */
@@ -55,7 +64,23 @@ export class ApiClient {
         }
       }
     } catch {
-      // not JSON
+      // Not JSON
+
+      // Try to extract <title> if it's an HTML page (e.g., Cloudflare 503 page)
+      const titleMatch = text.match(/<title>(.*?)<\/title>/i);
+      if (titleMatch && titleMatch[1]) {
+        return titleMatch[1].trim();
+      }
+
+      // If it's plain text (no HTML tags) and reasonably short, return it
+      const trimmed = text.trim();
+      if (
+        !trimmed.startsWith("<") &&
+        trimmed.length > 0 &&
+        trimmed.length < 200
+      ) {
+        return trimmed;
+      }
     }
 
     return fallback;
@@ -73,9 +98,50 @@ export class ApiClient {
     if (res.status === 401) {
       this.onUnauthorized(path);
     }
-    throw new Error(
-      await this.extractErrorMessage(res, `HTTP ${res.status}`),
-    );
+    const fallback = `HTTP ${res.status}${res.statusText ? ` ${res.statusText}` : ""}`;
+    throw new Error(await this.extractErrorMessage(res, fallback));
+  }
+
+  /** Internal fetch wrapper with retry logic for 5xx and network errors */
+  private async fetchWithRetry(
+    path: string,
+    init: RequestInit,
+  ): Promise<Response> {
+    const url = `${this.baseUrl}${path}`;
+
+    // Encourage JSON responses for errors
+    const headers = { ...(init.headers as Record<string, string>) };
+    if (!headers["Accept"]) {
+      headers["Accept"] = "application/json";
+    }
+    init.headers = headers;
+
+    let lastError: unknown;
+    for (let attempt = 0; attempt <= this.retries; attempt++) {
+      try {
+        const res = await fetch(url, init);
+        // Retry on 5xx errors or 429 Too Many Requests
+        if (!res.ok && (res.status >= 500 || res.status === 429)) {
+          if (attempt < this.retries) {
+            await new Promise((resolve) =>
+              setTimeout(resolve, this.retryDelay * Math.pow(2, attempt)),
+            );
+            continue;
+          }
+        }
+        return res;
+      } catch (error) {
+        lastError = error;
+        // Network error (fetch throws TypeError on network failure)
+        if (attempt < this.retries) {
+          await new Promise((resolve) =>
+            setTimeout(resolve, this.retryDelay * Math.pow(2, attempt)),
+          );
+          continue;
+        }
+      }
+    }
+    throw lastError || new Error("Request failed");
   }
 
   async get<T>(
@@ -83,7 +149,8 @@ export class ApiClient {
     extraHeaders?: Record<string, string>,
   ): Promise<T> {
     const headers = { ...this.buildHeaders(), ...extraHeaders };
-    const res = await fetch(`${this.baseUrl}${path}`, {
+    const res = await this.fetchWithRetry(path, {
+      method: "GET",
       headers,
       credentials: this.credentials,
     });
@@ -92,7 +159,7 @@ export class ApiClient {
   }
 
   async post<T>(path: string, body?: unknown): Promise<T> {
-    const res = await fetch(`${this.baseUrl}${path}`, {
+    const res = await this.fetchWithRetry(path, {
       method: "POST",
       headers: this.buildHeaders("application/json"),
       credentials: this.credentials,
@@ -103,7 +170,7 @@ export class ApiClient {
   }
 
   async put<T>(path: string, body?: unknown): Promise<T> {
-    const res = await fetch(`${this.baseUrl}${path}`, {
+    const res = await this.fetchWithRetry(path, {
       method: "PUT",
       headers: this.buildHeaders("application/json"),
       credentials: this.credentials,
@@ -114,7 +181,7 @@ export class ApiClient {
   }
 
   async delete<T>(path: string, body?: unknown): Promise<T> {
-    const res = await fetch(`${this.baseUrl}${path}`, {
+    const res = await this.fetchWithRetry(path, {
       method: "DELETE",
       headers: this.buildHeaders(body ? "application/json" : undefined),
       credentials: this.credentials,
@@ -127,7 +194,7 @@ export class ApiClient {
   async upload<T>(path: string, formData: FormData): Promise<T> {
     // No Content-Type header — browser sets multipart boundary automatically
     const headers = this.buildHeaders();
-    const res = await fetch(`${this.baseUrl}${path}`, {
+    const res = await this.fetchWithRetry(path, {
       method: "POST",
       headers,
       credentials: this.credentials,
