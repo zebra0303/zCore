@@ -16,11 +16,12 @@ Framework-agnostic utilities that can run in any environment (Client, Server, Ed
 * **Date Utilities**: `formatDate`, `timeAgo`.
 * **Identifiers**: Unique ID generation (`generateId` via `uuidv7`), Slugs (`slug`).
 * **Error Handling**: `ApiError` and `handleApiError` for consistent error structures.
+* **Types**: `ApiResponse`, `PaginatedResponse`.
 * **Styling**: Tailwind CSS class merging utility (`cn` using `clsx` and `tailwind-merge`).
 
 ### 2. Client (`@zebra/core/client`)
 Client-side specific logic and React UI components.
-* **UI Components**: `Modal`, `ToastContainer`, `Pagination`, `Skeleton`, `ConfirmModal`, `LinkifiedText`.
+* **UI Components**: `Button`, `Card`, `Input`, `Textarea`, `Badge`, `Modal`, `ToastContainer`, `Pagination`, `Skeleton`, `ConfirmModal`, `LinkifiedText`.
 * **State Management**: Zustand store factories (`createToastStore`, `createConfirmStore`) for isolated instances.
 * **Hooks**: Common React hooks like `useClickOutside`.
 * **API Client**: `ApiClient` for centralized HTTP requests and error parsing.

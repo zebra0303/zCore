@@ -16,11 +16,12 @@ BigStone 및 zlog 프로젝트를 위한 다목적 공통 유틸리티 라이브
 * **날짜 유틸리티**: 날짜 포맷팅(`formatDate`), 상대 시간 표시(`timeAgo`).
 * **식별자 생성**: 고유 ID 생성(`generateId` - `uuidv7` 기반), 슬러그 생성(`slug`).
 * **에러 처리**: 일관된 에러 구조를 위한 `ApiError` 및 `handleApiError`.
+* **타입 정의(Types)**: `ApiResponse`, `PaginatedResponse` 등 공통 API 래퍼 타입.
 * **스타일링**: Tailwind CSS 클래스 병합 유틸리티 (`clsx`와 `tailwind-merge` 기반의 `cn` 함수).
 
 ### 2. Client (`@zebra/core/client`)
 클라이언트 측 로직 및 React UI 컴포넌트 모음입니다.
-* **UI 컴포넌트**: `Modal`, `ToastContainer`, `Pagination`, `Skeleton`, `ConfirmModal`, `LinkifiedText` 등.
+* **UI 컴포넌트**: `Button`, `Card`, `Input`, `Textarea`, `Badge`, `Modal`, `ToastContainer`, `Pagination`, `Skeleton`, `ConfirmModal`, `LinkifiedText` 등.
 * **상태 관리**: 소비자 애플리케이션이 개별적인 상태 인스턴스를 가질 수 있게 해주는 Zustand 스토어 팩토리 (`createToastStore`, `createConfirmStore`).
 * **커스텀 훅**: 외부 클릭 감지(`useClickOutside`) 등 공통 React 훅.
 * **API 클라이언트**: 중앙집중화된 HTTP 요청 및 에러 파싱을 위한 `ApiClient`.
