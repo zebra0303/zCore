@@ -4,7 +4,13 @@ export { generateId } from "./generateId.js";
 export { createSlug, createUniqueSlug } from "./slug.js";
 
 // Error handling
-export { ApiError, handleApiError, getErrorMessage } from "./errors/index.js";
+export {
+  ApiError,
+  handleApiError,
+  getErrorMessage,
+  createMaskedError,
+  isAbortError,
+} from "./errors/index.js";
 
 // Text processing
 export {
@@ -12,6 +18,8 @@ export {
   estimateReadingTime,
   parseLinkSegments,
   type LinkSegment,
+  obfuscate,
+  deobfuscate,
 } from "./text/index.js";
 
 // Date formatting
