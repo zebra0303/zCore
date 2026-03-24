@@ -100,7 +100,10 @@ export class ApiClient {
       this.onUnauthorized(path);
     }
     const fallback = `HTTP ${res.status}${res.statusText ? ` ${res.statusText}` : ""}`;
-    throw new ApiError(await this.extractErrorMessage(res, fallback), res.status);
+    throw new ApiError(
+      await this.extractErrorMessage(res, fallback),
+      res.status,
+    );
   }
 
   /** Internal fetch wrapper with retry logic for 5xx and network errors */

@@ -1,6 +1,12 @@
 import { describe, it, expect } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "../Card.js";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "../Card.js";
 
 describe("Card", () => {
   it("renders card container", () => {
