@@ -17,9 +17,7 @@ describe("Skeleton", () => {
   });
 
   it("passes through HTML attributes", () => {
-    const html = renderToStaticMarkup(
-      <Skeleton data-testid="loader" aria-label="Loading" />,
-    );
+    const html = renderToStaticMarkup(<Skeleton data-testid="loader" aria-label="Loading" />);
     expect(html).toContain('data-testid="loader"');
     expect(html).toContain('aria-label="Loading"');
   });

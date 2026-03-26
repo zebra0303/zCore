@@ -59,16 +59,16 @@ export function ToastContainer({
             )}
             role="alert"
           >
-            <Icon
-              className={cn("h-5 w-5 shrink-0", iconColorMap[toast.type])}
-            />
+            <Icon className={cn("h-5 w-5 shrink-0", iconColorMap[toast.type])} />
             <p className="flex-1 text-sm font-medium text-gray-900 dark:text-gray-100">
               {toast.message}
             </p>
             <button
               type="button"
               className="shrink-0 rounded-md text-gray-400 hover:text-gray-600 focus:ring-2 focus:outline-none dark:hover:text-gray-200"
-              onClick={() => removeToast(toast.id)}
+              onClick={() => {
+                removeToast(toast.id);
+              }}
             >
               <span className="sr-only">Close</span>
               <X className="h-4 w-4" />

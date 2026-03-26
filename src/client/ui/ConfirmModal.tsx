@@ -46,30 +46,27 @@ export function ConfirmModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="confirm-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
+      className="bg-background/80 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
     >
       <div
         className={cn(
-          "bg-card text-card-foreground rounded-xl shadow-lg border w-full max-w-sm overflow-hidden",
+          "bg-card text-card-foreground w-full max-w-sm overflow-hidden rounded-xl border shadow-lg",
           className,
         )}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
         <div className="p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className={`p-2 rounded-full ${variantStyles[variant]}`}>
+          <div className="mb-4 flex items-center gap-3">
+            <div className={`rounded-full p-2 ${variantStyles[variant]}`}>
               <AlertTriangle className="h-5 w-5" />
             </div>
-            <h3
-              id="confirm-modal-title"
-              className="text-lg font-semibold tracking-tight"
-            >
+            <h3 id="confirm-modal-title" className="text-lg font-semibold tracking-tight">
               {title}
             </h3>
           </div>
-          <div className="text-sm text-muted-foreground mb-6 leading-relaxed">
-            {message}
-          </div>
+          <div className="text-muted-foreground mb-6 text-sm leading-relaxed">{message}</div>
           <div className="flex justify-end gap-3">
             <Button variant="outline" onClick={onCancel}>
               {cancelLabel}

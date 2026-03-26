@@ -53,9 +53,7 @@ describe("createUniqueSlug", () => {
   });
 
   it("increments suffix until unique", () => {
-    expect(createUniqueSlug("Hello", ["hello", "hello-2", "hello-3"])).toBe(
-      "hello-4",
-    );
+    expect(createUniqueSlug("Hello", ["hello", "hello-2", "hello-3"])).toBe("hello-4");
   });
 
   it("handles empty existing slugs array", () => {

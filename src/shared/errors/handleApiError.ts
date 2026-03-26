@@ -16,10 +16,10 @@ export async function handleApiError(
     const data: unknown = await response.json();
     if (typeof data === "object" && data !== null) {
       const obj = data as Record<string, unknown>;
-      if (typeof obj["error"] === "string" && obj["error"].trim()) {
-        message = obj["error"];
-      } else if (typeof obj["message"] === "string" && obj["message"].trim()) {
-        message = obj["message"];
+      if (typeof obj.error === "string" && obj.error.trim()) {
+        message = obj.error;
+      } else if (typeof obj.message === "string" && obj.message.trim()) {
+        message = obj.message;
       }
       details = data;
     }

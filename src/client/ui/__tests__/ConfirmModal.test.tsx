@@ -12,9 +12,7 @@ describe("ConfirmModal", () => {
   };
 
   it("renders nothing when isOpen is false", () => {
-    const html = renderToStaticMarkup(
-      <ConfirmModal {...defaultProps} isOpen={false} />,
-    );
+    const html = renderToStaticMarkup(<ConfirmModal {...defaultProps} isOpen={false} />);
     expect(html).toBe("");
   });
 
@@ -45,9 +43,7 @@ describe("ConfirmModal", () => {
   });
 
   it("applies variant styles", () => {
-    const html = renderToStaticMarkup(
-      <ConfirmModal {...defaultProps} variant="warning" />,
-    );
+    const html = renderToStaticMarkup(<ConfirmModal {...defaultProps} variant="warning" />);
     expect(html).toContain("text-amber-600");
   });
 });

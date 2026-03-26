@@ -15,9 +15,7 @@ describe("Button", () => {
   });
 
   it("applies destructive variant", () => {
-    const html = renderToStaticMarkup(
-      <Button variant="destructive">Delete</Button>,
-    );
+    const html = renderToStaticMarkup(<Button variant="destructive">Delete</Button>);
     expect(html).toContain("bg-destructive");
   });
 

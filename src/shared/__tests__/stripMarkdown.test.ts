@@ -8,9 +8,7 @@ describe("stripMarkdown", () => {
   });
 
   it("removes code blocks", () => {
-    expect(stripMarkdown("before ```const x = 1;``` after")).toBe(
-      "before after",
-    );
+    expect(stripMarkdown("before ```const x = 1;``` after")).toBe("before after");
   });
 
   it("removes multiline code blocks", () => {
@@ -19,9 +17,7 @@ describe("stripMarkdown", () => {
   });
 
   it("removes HTML tags", () => {
-    expect(stripMarkdown("<b>bold</b> and <i>italic</i>")).toBe(
-      "bold and italic",
-    );
+    expect(stripMarkdown("<b>bold</b> and <i>italic</i>")).toBe("bold and italic");
   });
 
   it("removes nested HTML tags", () => {
@@ -29,21 +25,15 @@ describe("stripMarkdown", () => {
   });
 
   it("preserves alt text from images", () => {
-    expect(stripMarkdown("![alt text](https://example.com/img.png)")).toBe(
-      "alt text",
-    );
+    expect(stripMarkdown("![alt text](https://example.com/img.png)")).toBe("alt text");
   });
 
   it("preserves link text", () => {
-    expect(stripMarkdown("[click here](https://example.com)")).toBe(
-      "click here",
-    );
+    expect(stripMarkdown("[click here](https://example.com)")).toBe("click here");
   });
 
   it("removes headers", () => {
-    expect(stripMarkdown("# Title\n## Subtitle\nBody")).toBe(
-      "Title Subtitle Body",
-    );
+    expect(stripMarkdown("# Title\n## Subtitle\nBody")).toBe("Title Subtitle Body");
   });
 
   it("removes blockquotes", () => {
@@ -61,9 +51,7 @@ describe("stripMarkdown", () => {
   });
 
   it("removes inline code", () => {
-    expect(stripMarkdown("use `console.log()` here")).toBe(
-      "use console.log() here",
-    );
+    expect(stripMarkdown("use `console.log()` here")).toBe("use console.log() here");
   });
 
   it("removes horizontal rules", () => {
@@ -81,9 +69,7 @@ describe("stripMarkdown", () => {
   });
 
   it("normalizes whitespace", () => {
-    expect(stripMarkdown("too   many   spaces\n\n\nnewlines")).toBe(
-      "too many spaces newlines",
-    );
+    expect(stripMarkdown("too   many   spaces\n\n\nnewlines")).toBe("too many spaces newlines");
   });
 
   it("handles complex mixed markdown", () => {

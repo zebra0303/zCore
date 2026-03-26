@@ -5,9 +5,7 @@ describe("generateId", () => {
   it("returns a valid UUID string", () => {
     const id = generateId();
     // UUID format: 8-4-4-4-12 hex characters
-    expect(id).toMatch(
-      /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
-    );
+    expect(id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
   });
 
   it("generates unique IDs", () => {

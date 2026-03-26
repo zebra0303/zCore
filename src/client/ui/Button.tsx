@@ -17,23 +17,9 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      className,
-      variant = "default",
-      size = "default",
-      asChild = false,
-      ...props
-    },
-    ref,
-  ) => {
+  ({ className, variant = "default", size = "default", asChild = false, ...props }, ref) => {
     // Map alternate names
-    const v =
-      variant === "primary"
-        ? "default"
-        : variant === "danger"
-          ? "destructive"
-          : variant;
+    const v = variant === "primary" ? "default" : variant === "danger" ? "destructive" : variant;
     const s = size === "md" ? "default" : size;
 
     const Comp = asChild ? Slot : "button";
@@ -42,13 +28,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ring-offset-background",
+          "focus-visible:ring-primary ring-offset-background inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
           {
-            "bg-primary text-primary-foreground hover:bg-primary/90":
-              v === "default",
-            "bg-secondary text-secondary-foreground hover:bg-secondary/80":
-              v === "secondary",
-            "border border-input bg-background hover:bg-accent hover:text-accent-foreground":
+            "bg-primary text-primary-foreground hover:bg-primary/90": v === "default",
+            "bg-secondary text-secondary-foreground hover:bg-secondary/80": v === "secondary",
+            "border-input bg-background hover:bg-accent hover:text-accent-foreground border":
               v === "outline",
             "hover:bg-accent hover:text-accent-foreground": v === "ghost",
             "bg-destructive text-destructive-foreground hover:bg-destructive/90":

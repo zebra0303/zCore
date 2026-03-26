@@ -11,7 +11,7 @@ export const obfuscate = (data: string): string => {
       result += String.fromCharCode(encoded.charCodeAt(i) + 13); // Simple shift
     }
     return btoa(result);
-  } catch (e) {
+  } catch {
     return "";
   }
 };
@@ -27,7 +27,7 @@ export const deobfuscate = (obfuscated: string): string => {
       result += String.fromCharCode(decoded.charCodeAt(i) - 13);
     }
     return decodeURIComponent(result);
-  } catch (e) {
+  } catch {
     return "";
   }
 };

@@ -27,10 +27,12 @@ export function LinkifiedText({ text, linkClassName }: LinkifiedTextProps) {
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              "text-blue-600 hover:underline font-medium dark:text-blue-400",
+              "font-medium text-blue-600 hover:underline dark:text-blue-400",
               linkClassName,
             )}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
           >
             {seg.text}
           </a>

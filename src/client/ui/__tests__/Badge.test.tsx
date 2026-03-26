@@ -25,9 +25,7 @@ describe("Badge", () => {
   });
 
   it("applies destructive variant", () => {
-    const html = renderToStaticMarkup(
-      <Badge variant="destructive">Error</Badge>,
-    );
+    const html = renderToStaticMarkup(<Badge variant="destructive">Error</Badge>);
     expect(html).toContain("bg-destructive");
   });
 

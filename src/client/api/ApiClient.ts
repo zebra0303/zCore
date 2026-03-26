@@ -39,17 +39,18 @@ export class ApiClient {
   constructor(options: ApiClientOptions = {}) {
     this.baseUrl = options.baseUrl ?? "/api";
     this.getAuthHeaders = options.getAuthHeaders ?? (() => ({}));
-    this.onUnauthorized = options.onUnauthorized ?? (() => {});
+    this.onUnauthorized =
+      options.onUnauthorized ??
+      (() => {
+        /* no-op */
+      });
     this.credentials = options.credentials ?? "include";
     this.retries = options.retries ?? 0;
     this.retryDelay = options.retryDelay ?? 1000;
   }
 
   /** Extract error message from a failed response. */
-  private async extractErrorMessage(
-    res: Response,
-    fallback: string,
-  ): Promise<string> {
+  private async extractErrorMessage(res: Response, fallback: string): Promise<string> {
     const text = await res.text().catch(() => "");
     if (!text) return fallback;
 
@@ -57,29 +58,25 @@ export class ApiClient {
       const parsed: unknown = JSON.parse(text);
       if (typeof parsed === "object" && parsed !== null) {
         const obj = parsed as Record<string, unknown>;
-        if (typeof obj["error"] === "string" && obj["error"].trim()) {
-          return obj["error"];
+        if (typeof obj.error === "string" && obj.error.trim()) {
+          return obj.error;
         }
-        if (typeof obj["message"] === "string" && obj["message"].trim()) {
-          return obj["message"];
+        if (typeof obj.message === "string" && obj.message.trim()) {
+          return obj.message;
         }
       }
     } catch {
       // Not JSON
 
       // Try to extract <title> if it's an HTML page (e.g., Cloudflare 503 page)
-      const titleMatch = text.match(/<title>(.*?)<\/title>/i);
-      if (titleMatch && titleMatch[1]) {
+      const titleMatch = /<title>(.*?)<\/title>/i.exec(text);
+      if (titleMatch?.[1]) {
         return titleMatch[1].trim();
       }
 
       // If it's plain text (no HTML tags) and reasonably short, return it
       const trimmed = text.trim();
-      if (
-        !trimmed.startsWith("<") &&
-        trimmed.length > 0 &&
-        trimmed.length < 200
-      ) {
+      if (!trimmed.startsWith("<") && trimmed.length > 0 && trimmed.length < 200) {
         return trimmed;
       }
     }
@@ -100,24 +97,16 @@ export class ApiClient {
       this.onUnauthorized(path);
     }
     const fallback = `HTTP ${res.status}${res.statusText ? ` ${res.statusText}` : ""}`;
-    throw new ApiError(
-      await this.extractErrorMessage(res, fallback),
-      res.status,
-    );
+    throw new ApiError(await this.extractErrorMessage(res, fallback), res.status);
   }
 
   /** Internal fetch wrapper with retry logic for 5xx and network errors */
-  private async fetchWithRetry(
-    path: string,
-    init: RequestInit,
-  ): Promise<Response> {
+  private async fetchWithRetry(path: string, init: RequestInit): Promise<Response> {
     const url = `${this.baseUrl}${path}`;
 
     // Encourage JSON responses for errors
     const headers = { ...(init.headers as Record<string, string>) };
-    if (!headers["Accept"]) {
-      headers["Accept"] = "application/json";
-    }
+    headers.Accept ??= "application/json";
     init.headers = headers;
 
     let lastError: unknown;
@@ -145,13 +134,10 @@ export class ApiClient {
         }
       }
     }
-    throw lastError || new Error("Request failed");
+    throw lastError instanceof Error ? lastError : new Error("Request failed");
   }
 
-  async get<T>(
-    path: string,
-    extraHeaders?: Record<string, string>,
-  ): Promise<T> {
+  async get<T>(path: string, extraHeaders?: Record<string, string>): Promise<T> {
     const headers = { ...this.buildHeaders(), ...extraHeaders };
     const res = await this.fetchWithRetry(path, {
       method: "GET",

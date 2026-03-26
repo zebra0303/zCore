@@ -14,9 +14,7 @@ describe("LinkifiedText", () => {
   });
 
   it("renders a URL as a clickable link", () => {
-    const html = renderToStaticMarkup(
-      <LinkifiedText text="Visit https://example.com please" />,
-    );
+    const html = renderToStaticMarkup(<LinkifiedText text="Visit https://example.com please" />);
     expect(html).toContain('<a href="https://example.com"');
     expect(html).toContain('target="_blank"');
     expect(html).toContain('rel="noopener noreferrer"');
@@ -40,9 +38,7 @@ describe("LinkifiedText", () => {
   });
 
   it("renders text-only content without anchor tags", () => {
-    const html = renderToStaticMarkup(
-      <LinkifiedText text="No links here at all" />,
-    );
+    const html = renderToStaticMarkup(<LinkifiedText text="No links here at all" />);
     expect(html).not.toContain("<a ");
     expect(html).toBe("No links here at all");
   });

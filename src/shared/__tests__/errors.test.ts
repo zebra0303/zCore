@@ -26,11 +26,7 @@ describe("ApiError", () => {
 });
 
 describe("handleApiError", () => {
-  function mockResponse(
-    status: number,
-    body: unknown,
-    statusText = "",
-  ): Response {
+  function mockResponse(status: number, body: unknown, statusText = ""): Response {
     return {
       status,
       statusText,
@@ -99,9 +95,7 @@ describe("handleApiError", () => {
 
 describe("getErrorMessage", () => {
   it("returns Error message when available", () => {
-    expect(getErrorMessage(new Error("Something failed"), "fallback")).toBe(
-      "Something failed",
-    );
+    expect(getErrorMessage(new Error("Something failed"), "fallback")).toBe("Something failed");
   });
 
   it("returns fallback for non-Error value", () => {

@@ -48,16 +48,14 @@ export function Modal({
     <dialog
       ref={dialogRef}
       className={cn(
-        "fixed inset-0 z-50 m-auto flex max-h-[85vh] w-[calc(100%-2rem)] max-w-sm flex-col gap-4 rounded-2xl bg-white p-6 shadow-2xl backdrop:bg-black/50 dark:bg-gray-800 sm:w-full",
+        "fixed inset-0 z-50 m-auto flex max-h-[85vh] w-[calc(100%-2rem)] max-w-sm flex-col gap-4 rounded-2xl bg-white p-6 shadow-2xl backdrop:bg-black/50 sm:w-full dark:bg-gray-800",
         className,
       )}
       onClose={onClose}
       onClick={handleBackdropClick}
     >
       {title && (
-        <div className="pr-6 text-lg font-semibold text-gray-900 dark:text-gray-100">
-          {title}
-        </div>
+        <div className="pr-6 text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</div>
       )}
       <button
         onClick={onClose}

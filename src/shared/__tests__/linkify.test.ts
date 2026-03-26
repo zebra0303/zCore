@@ -7,9 +7,7 @@ describe("parseLinkSegments", () => {
   });
 
   it("returns single plain text segment when no URLs", () => {
-    expect(parseLinkSegments("Hello world")).toEqual([
-      { text: "Hello world", isUrl: false },
-    ]);
+    expect(parseLinkSegments("Hello world")).toEqual([{ text: "Hello world", isUrl: false }]);
   });
 
   it("detects a single URL", () => {
@@ -22,9 +20,7 @@ describe("parseLinkSegments", () => {
   });
 
   it("detects multiple URLs", () => {
-    const result = parseLinkSegments(
-      "Go to https://a.com and http://b.com end",
-    );
+    const result = parseLinkSegments("Go to https://a.com and http://b.com end");
     expect(result).toHaveLength(5);
     expect(result[1]).toEqual({ text: "https://a.com", isUrl: true });
     expect(result[3]).toEqual({ text: "http://b.com", isUrl: true });
@@ -44,9 +40,7 @@ describe("parseLinkSegments", () => {
   });
 
   it("handles URL with path and query", () => {
-    const result = parseLinkSegments(
-      "see https://example.com/path?q=1&b=2 here",
-    );
+    const result = parseLinkSegments("see https://example.com/path?q=1&b=2 here");
     expect(result[1]).toEqual({
       text: "https://example.com/path?q=1&b=2",
       isUrl: true,
@@ -55,8 +49,6 @@ describe("parseLinkSegments", () => {
 
   it("does not match non-http protocols", () => {
     const result = parseLinkSegments("use ftp://example.com here");
-    expect(result).toEqual([
-      { text: "use ftp://example.com here", isUrl: false },
-    ]);
+    expect(result).toEqual([{ text: "use ftp://example.com here", isUrl: false }]);
   });
 });

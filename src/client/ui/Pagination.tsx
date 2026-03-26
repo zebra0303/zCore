@@ -24,11 +24,7 @@ export function buildPageList(
 ): (number | "...")[] {
   const pages: (number | "...")[] = [];
   for (let i = 1; i <= totalPages; i++) {
-    if (
-      i === 1 ||
-      i === totalPages ||
-      (i >= currentPage - delta && i <= currentPage + delta)
-    ) {
+    if (i === 1 || i === totalPages || (i >= currentPage - delta && i <= currentPage + delta)) {
       pages.push(i);
     } else if (pages[pages.length - 1] !== "...") {
       pages.push("...");
@@ -60,7 +56,9 @@ export function Pagination({
       <button
         className={cn(baseBtn, buttonClassName)}
         disabled={currentPage === 1}
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={() => {
+          onPageChange(currentPage - 1);
+        }}
         aria-label="Previous page"
       >
         <ChevronLeft className="h-4 w-4" />
@@ -83,7 +81,9 @@ export function Pagination({
                   )
                 : buttonClassName,
             )}
-            onClick={() => onPageChange(page)}
+            onClick={() => {
+              onPageChange(page);
+            }}
             aria-current={page === currentPage ? "page" : undefined}
           >
             {page}
@@ -94,7 +94,9 @@ export function Pagination({
       <button
         className={cn(baseBtn, buttonClassName)}
         disabled={currentPage === totalPages}
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={() => {
+          onPageChange(currentPage + 1);
+        }}
         aria-label="Next page"
       >
         <ChevronRight className="h-4 w-4" />

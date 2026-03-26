@@ -123,9 +123,6 @@ describe("ApiClient", () => {
     const api = new ApiClient({ baseUrl: "https://api.example.com/v2" });
     await api.get("/users");
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      "https://api.example.com/v2/users",
-      expect.anything(),
-    );
+    expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/v2/users", expect.anything());
   });
 });
