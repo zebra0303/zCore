@@ -557,6 +557,7 @@ function ConfirmModal({
   message,
   confirmLabel = "Confirm",
   cancelLabel = "Cancel",
+  showCancel = true,
   onConfirm,
   onCancel,
   variant = "danger",
@@ -597,11 +598,12 @@ function ConfirmModal({
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "text-muted-foreground mb-6 text-sm leading-relaxed", children: message }),
             /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "flex justify-end gap-3", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Button, { variant: "outline", onClick: onCancel, children: cancelLabel }),
+              showCancel && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Button, { variant: "outline", onClick: onCancel, children: cancelLabel }),
               /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
                 Button,
                 {
                   variant: buttonVariants[variant],
+                  className: showCancel ? "" : "w-full",
                   onClick: () => {
                     onConfirm();
                     onCancel();
@@ -672,14 +674,14 @@ var Checkbox = import_react5.default.forwardRef(
         {
           type: "checkbox",
           className: cn(
-            "peer h-4 w-4 shrink-0 rounded-sm border border-gray-900 bg-transparent shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 appearance-none checked:bg-primary checked:border-primary dark:border-gray-500",
+            "peer focus-visible:ring-primary checked:bg-primary checked:border-primary h-4 w-4 shrink-0 appearance-none rounded-sm border border-gray-900 bg-transparent shadow focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-500",
             className
           ),
           ref,
           ...props
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_lucide_react5.Check, { className: "pointer-events-none absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 text-primary-foreground opacity-0 peer-checked:opacity-100" })
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_lucide_react5.Check, { className: "text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 opacity-0 peer-checked:opacity-100" })
     ] });
   }
 );
@@ -696,7 +698,7 @@ var Select = import_react6.default.forwardRef(
         "select",
         {
           className: cn(
-            "flex h-10 w-full appearance-none rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-primary",
+            "focus:ring-primary dark:focus:ring-primary flex h-10 w-full appearance-none rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100",
             className
           ),
           ref,
@@ -704,7 +706,7 @@ var Select = import_react6.default.forwardRef(
           children
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_lucide_react6.ChevronDown, { className: "pointer-events-none absolute right-3 top-3 h-4 w-4 text-gray-500 opacity-50 dark:text-gray-400" })
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_lucide_react6.ChevronDown, { className: "pointer-events-none absolute top-3 right-3 h-4 w-4 text-gray-500 opacity-50 dark:text-gray-400" })
     ] });
   }
 );
@@ -712,7 +714,14 @@ Select.displayName = "Select";
 
 // src/client/ui/ToggleSwitch.tsx
 var import_jsx_runtime10 = require("react/jsx-runtime");
-function ToggleSwitch({ checked, onToggle, label, size = "md", className, ...props }) {
+function ToggleSwitch({
+  checked,
+  onToggle,
+  label,
+  size = "md",
+  className,
+  ...props
+}) {
   const isMd = size === "md";
   return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
     "button",
@@ -723,7 +732,7 @@ function ToggleSwitch({ checked, onToggle, label, size = "md", className, ...pro
       "aria-label": label,
       onClick: onToggle,
       className: cn(
-        "relative rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+        "focus:ring-primary relative rounded-full transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none",
         checked ? "bg-primary" : "bg-gray-200 dark:bg-gray-700",
         isMd ? "h-6 w-11" : "h-5 w-9",
         className
@@ -733,7 +742,7 @@ function ToggleSwitch({ checked, onToggle, label, size = "md", className, ...pro
         "span",
         {
           className: cn(
-            "absolute top-0.5 rounded-full bg-white transition-transform shadow-sm",
+            "absolute top-0.5 rounded-full bg-white shadow-sm transition-transform",
             isMd ? `h-5 w-5 ${checked ? "translate-x-[20px]" : "translate-x-0.5"}` : `h-4 w-4 ${checked ? "translate-x-[16px]" : "translate-x-0.5"}`
           )
         }

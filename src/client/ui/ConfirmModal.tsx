@@ -9,6 +9,7 @@ export interface ConfirmModalProps {
   message: React.ReactNode;
   confirmLabel?: string;
   cancelLabel?: string;
+  showCancel?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
   variant?: "danger" | "warning" | "info";
@@ -21,6 +22,7 @@ export function ConfirmModal({
   message,
   confirmLabel = "Confirm",
   cancelLabel = "Cancel",
+  showCancel = true,
   onConfirm,
   onCancel,
   variant = "danger",
@@ -68,11 +70,14 @@ export function ConfirmModal({
           </div>
           <div className="text-muted-foreground mb-6 text-sm leading-relaxed">{message}</div>
           <div className="flex justify-end gap-3">
-            <Button variant="outline" onClick={onCancel}>
-              {cancelLabel}
-            </Button>
+            {showCancel && (
+              <Button variant="outline" onClick={onCancel}>
+                {cancelLabel}
+              </Button>
+            )}
             <Button
               variant={buttonVariants[variant]}
+              className={showCancel ? "" : "w-full"}
               onClick={() => {
                 onConfirm();
                 onCancel();

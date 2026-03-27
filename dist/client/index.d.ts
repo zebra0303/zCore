@@ -145,12 +145,13 @@ interface ConfirmModalProps {
     message: React__default.ReactNode;
     confirmLabel?: string;
     cancelLabel?: string;
+    showCancel?: boolean;
     onConfirm: () => void;
     onCancel: () => void;
     variant?: "danger" | "warning" | "info";
     className?: string;
 }
-declare function ConfirmModal({ isOpen, title, message, confirmLabel, cancelLabel, onConfirm, onCancel, variant, className, }: ConfirmModalProps): react_jsx_runtime.JSX.Element | null;
+declare function ConfirmModal({ isOpen, title, message, confirmLabel, cancelLabel, showCancel, onConfirm, onCancel, variant, className, }: ConfirmModalProps): react_jsx_runtime.JSX.Element | null;
 
 interface LinkifiedTextProps {
     text: string;
@@ -177,7 +178,7 @@ type SelectProps = React__default.SelectHTMLAttributes<HTMLSelectElement>;
  */
 declare const Select: React__default.ForwardRefExoticComponent<SelectProps & React__default.RefAttributes<HTMLSelectElement>>;
 
-interface ToggleSwitchProps extends Omit<React__default.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
+interface ToggleSwitchProps extends Omit<React__default.ButtonHTMLAttributes<HTMLButtonElement>, "onClick"> {
     checked: boolean;
     onToggle: () => void;
     label?: string;
