@@ -38,14 +38,18 @@ __export(client_exports, {
   CardFooter: () => CardFooter,
   CardHeader: () => CardHeader,
   CardTitle: () => CardTitle,
+  Checkbox: () => Checkbox,
   ConfirmModal: () => ConfirmModal,
   Input: () => Input,
+  LazyImage: () => LazyImage,
   LinkifiedText: () => LinkifiedText,
   Modal: () => Modal,
   Pagination: () => Pagination,
+  Select: () => Select,
   Skeleton: () => Skeleton,
   Textarea: () => Textarea,
   ToastContainer: () => ToastContainer,
+  ToggleSwitch: () => ToggleSwitch,
   buildPageList: () => buildPageList,
   createConfirmStore: () => createConfirmStore,
   createToastStore: () => createToastStore,
@@ -656,11 +660,167 @@ function LinkifiedText({ text, linkClassName }) {
   ) });
 }
 
-// src/client/ui/Card.tsx
+// src/client/ui/Checkbox.tsx
 var import_react5 = __toESM(require("react"), 1);
+var import_lucide_react5 = require("lucide-react");
 var import_jsx_runtime8 = require("react/jsx-runtime");
-var Card = import_react5.default.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+var Checkbox = import_react5.default.forwardRef(
+  ({ className, ...props }, ref) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "relative flex items-center", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        "input",
+        {
+          type: "checkbox",
+          className: cn(
+            "peer h-4 w-4 shrink-0 rounded-sm border border-gray-900 bg-transparent shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 appearance-none checked:bg-primary checked:border-primary dark:border-gray-500",
+            className
+          ),
+          ref,
+          ...props
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_lucide_react5.Check, { className: "pointer-events-none absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 text-primary-foreground opacity-0 peer-checked:opacity-100" })
+    ] });
+  }
+);
+Checkbox.displayName = "Checkbox";
+
+// src/client/ui/Select.tsx
+var import_react6 = __toESM(require("react"), 1);
+var import_lucide_react6 = require("lucide-react");
+var import_jsx_runtime9 = require("react/jsx-runtime");
+var Select = import_react6.default.forwardRef(
+  ({ className, children, ...props }, ref) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "relative", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        "select",
+        {
+          className: cn(
+            "flex h-10 w-full appearance-none rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-primary",
+            className
+          ),
+          ref,
+          ...props,
+          children
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_lucide_react6.ChevronDown, { className: "pointer-events-none absolute right-3 top-3 h-4 w-4 text-gray-500 opacity-50 dark:text-gray-400" })
+    ] });
+  }
+);
+Select.displayName = "Select";
+
+// src/client/ui/ToggleSwitch.tsx
+var import_jsx_runtime10 = require("react/jsx-runtime");
+function ToggleSwitch({ checked, onToggle, label, size = "md", className, ...props }) {
+  const isMd = size === "md";
+  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+    "button",
+    {
+      type: "button",
+      role: "switch",
+      "aria-checked": checked,
+      "aria-label": label,
+      onClick: onToggle,
+      className: cn(
+        "relative rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+        checked ? "bg-primary" : "bg-gray-200 dark:bg-gray-700",
+        isMd ? "h-6 w-11" : "h-5 w-9",
+        className
+      ),
+      ...props,
+      children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+        "span",
+        {
+          className: cn(
+            "absolute top-0.5 rounded-full bg-white transition-transform shadow-sm",
+            isMd ? `h-5 w-5 ${checked ? "translate-x-[20px]" : "translate-x-0.5"}` : `h-4 w-4 ${checked ? "translate-x-[16px]" : "translate-x-0.5"}`
+          )
+        }
+      )
+    }
+  );
+}
+
+// src/client/ui/LazyImage.tsx
+var import_react7 = require("react");
+var import_jsx_runtime11 = require("react/jsx-runtime");
+function LazyImage({
+  src,
+  alt,
+  className,
+  fallback,
+  objectFit = "cover",
+  priority = false,
+  rootMargin = "200px",
+  srcSet,
+  sizes,
+  style,
+  ...props
+}) {
+  const [isLoaded, setIsLoaded] = (0, import_react7.useState)(false);
+  const [isInView, setIsInView] = (0, import_react7.useState)(priority);
+  const [hasError, setHasError] = (0, import_react7.useState)(false);
+  const containerRef = (0, import_react7.useRef)(null);
+  (0, import_react7.useEffect)(() => {
+    if (priority || isInView) return;
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin }
+    );
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+    };
+  }, [priority, isInView, rootMargin]);
+  if (hasError && fallback) return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(import_jsx_runtime11.Fragment, { children: fallback });
+  return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+    "div",
+    {
+      ref: containerRef,
+      className: cn("relative overflow-hidden bg-gray-100 dark:bg-gray-800", className),
+      style,
+      children: isInView && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+        "img",
+        {
+          src,
+          srcSet,
+          sizes,
+          alt,
+          fetchPriority: priority ? "high" : "auto",
+          loading: priority ? "eager" : "lazy",
+          decoding: priority ? "sync" : "async",
+          className: cn(
+            "block w-full transition-opacity duration-500",
+            style?.aspectRatio ? "h-full" : "h-auto",
+            objectFit === "contain" ? "object-contain" : objectFit === "contain-mobile" ? "object-contain md:object-cover" : "object-cover",
+            isLoaded ? "opacity-100" : "opacity-0"
+          ),
+          onLoad: () => {
+            setIsLoaded(true);
+          },
+          onError: () => {
+            setHasError(true);
+          },
+          ...props
+        }
+      )
+    }
+  );
+}
+
+// src/client/ui/Card.tsx
+var import_react8 = __toESM(require("react"), 1);
+var import_jsx_runtime12 = require("react/jsx-runtime");
+var Card = import_react8.default.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
     "div",
     {
       ref,
@@ -670,27 +830,27 @@ var Card = import_react5.default.forwardRef(
   )
 );
 Card.displayName = "Card";
-var CardHeader = import_react5.default.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { ref, className: cn("flex flex-col space-y-1.5 p-6", className), ...props })
+var CardHeader = import_react8.default.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { ref, className: cn("flex flex-col space-y-1.5 p-6", className), ...props })
 );
 CardHeader.displayName = "CardHeader";
-var CardTitle = import_react5.default.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h3", { ref, className: cn("leading-none font-semibold tracking-tight", className), ...props }));
+var CardTitle = import_react8.default.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("h3", { ref, className: cn("leading-none font-semibold tracking-tight", className), ...props }));
 CardTitle.displayName = "CardTitle";
-var CardContent = import_react5.default.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { ref, className: cn("p-6 pt-0", className), ...props })
+var CardContent = import_react8.default.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { ref, className: cn("p-6 pt-0", className), ...props })
 );
 CardContent.displayName = "CardContent";
-var CardFooter = import_react5.default.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { ref, className: cn("flex items-center p-6 pt-0", className), ...props })
+var CardFooter = import_react8.default.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { ref, className: cn("flex items-center p-6 pt-0", className), ...props })
 );
 CardFooter.displayName = "CardFooter";
 
 // src/client/ui/Input.tsx
-var import_react6 = __toESM(require("react"), 1);
-var import_jsx_runtime9 = require("react/jsx-runtime");
-var Input = import_react6.default.forwardRef(
+var import_react9 = __toESM(require("react"), 1);
+var import_jsx_runtime13 = require("react/jsx-runtime");
+var Input = import_react9.default.forwardRef(
   ({ className, type = "text", ...props }, ref) => {
-    return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
       "input",
       {
         type,
@@ -707,11 +867,11 @@ var Input = import_react6.default.forwardRef(
 Input.displayName = "Input";
 
 // src/client/ui/Textarea.tsx
-var import_react7 = __toESM(require("react"), 1);
-var import_jsx_runtime10 = require("react/jsx-runtime");
-var Textarea = import_react7.default.forwardRef(
+var import_react10 = __toESM(require("react"), 1);
+var import_jsx_runtime14 = require("react/jsx-runtime");
+var Textarea = import_react10.default.forwardRef(
   ({ className, ...props }, ref) => {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
       "textarea",
       {
         className: cn(
@@ -727,9 +887,9 @@ var Textarea = import_react7.default.forwardRef(
 Textarea.displayName = "Textarea";
 
 // src/client/ui/Badge.tsx
-var import_jsx_runtime11 = require("react/jsx-runtime");
+var import_jsx_runtime15 = require("react/jsx-runtime");
 function Badge({ className, variant = "default", ...props }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
     "span",
     {
       className: cn(
@@ -756,14 +916,18 @@ function Badge({ className, variant = "default", ...props }) {
   CardFooter,
   CardHeader,
   CardTitle,
+  Checkbox,
   ConfirmModal,
   Input,
+  LazyImage,
   LinkifiedText,
   Modal,
   Pagination,
+  Select,
   Skeleton,
   Textarea,
   ToastContainer,
+  ToggleSwitch,
   buildPageList,
   createConfirmStore,
   createToastStore,

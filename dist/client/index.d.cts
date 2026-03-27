@@ -163,6 +163,46 @@ interface LinkifiedTextProps {
  */
 declare function LinkifiedText({ text, linkClassName }: LinkifiedTextProps): react_jsx_runtime.JSX.Element | null;
 
+type CheckboxProps = Omit<React__default.InputHTMLAttributes<HTMLInputElement>, "type">;
+/**
+ * Reusable checkbox component with custom styling and accessibility.
+ * Synchronized from BigStone project for global use.
+ */
+declare const Checkbox: React__default.ForwardRefExoticComponent<CheckboxProps & React__default.RefAttributes<HTMLInputElement>>;
+
+type SelectProps = React__default.SelectHTMLAttributes<HTMLSelectElement>;
+/**
+ * Reusable select component with custom styling and Chevron icon.
+ * Synchronized from BigStone project for global use.
+ */
+declare const Select: React__default.ForwardRefExoticComponent<SelectProps & React__default.RefAttributes<HTMLSelectElement>>;
+
+interface ToggleSwitchProps extends Omit<React__default.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
+    checked: boolean;
+    onToggle: () => void;
+    label?: string;
+    size?: "sm" | "md";
+}
+/**
+ * Reusable toggle switch component with built-in accessibility.
+ * Synchronized from zlog project for global use.
+ * - sm: h-5 w-9 track, h-4 w-4 thumb
+ * - md: h-6 w-11 track, h-5 w-5 thumb (default)
+ */
+declare function ToggleSwitch({ checked, onToggle, label, size, className, ...props }: ToggleSwitchProps): react_jsx_runtime.JSX.Element;
+
+interface LazyImageProps extends React__default.ImgHTMLAttributes<HTMLImageElement> {
+    fallback?: React__default.ReactNode;
+    objectFit?: "cover" | "contain" | "contain-mobile";
+    priority?: boolean;
+    rootMargin?: string;
+}
+/**
+ * Image component with intersection observer lazy loading and LCP optimization.
+ * Synchronized from zlog project for global use.
+ */
+declare function LazyImage({ src, alt, className, fallback, objectFit, priority, rootMargin, srcSet, sizes, style, ...props }: LazyImageProps): react_jsx_runtime.JSX.Element;
+
 interface ButtonProps extends React__default.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: "default" | "primary" | "secondary" | "outline" | "ghost" | "danger" | "destructive" | "link";
     size?: "xs" | "sm" | "default" | "md" | "lg" | "icon";
@@ -187,4 +227,4 @@ interface BadgeProps extends React__default.HTMLAttributes<HTMLSpanElement> {
 }
 declare function Badge({ className, variant, ...props }: BadgeProps): react_jsx_runtime.JSX.Element;
 
-export { ApiClient, type ApiClientOptions, Badge, type BadgeProps, Button, type ButtonProps, Card, CardContent, CardFooter, CardHeader, CardTitle, ConfirmModal, type ConfirmModalProps, type ConfirmState, Input, type InputProps, LinkifiedText, type LinkifiedTextProps, Modal, type ModalProps, Pagination, type PaginationProps, Skeleton, Textarea, type TextareaProps, type Toast, ToastContainer, type ToastContainerProps, type ToastState, type ToastStoreOptions, type ToastType, buildPageList, createConfirmStore, createToastStore, useClickOutside };
+export { ApiClient, type ApiClientOptions, Badge, type BadgeProps, Button, type ButtonProps, Card, CardContent, CardFooter, CardHeader, CardTitle, Checkbox, type CheckboxProps, ConfirmModal, type ConfirmModalProps, type ConfirmState, Input, type InputProps, LazyImage, type LazyImageProps, LinkifiedText, type LinkifiedTextProps, Modal, type ModalProps, Pagination, type PaginationProps, Select, type SelectProps, Skeleton, Textarea, type TextareaProps, type Toast, ToastContainer, type ToastContainerProps, type ToastState, type ToastStoreOptions, type ToastType, ToggleSwitch, type ToggleSwitchProps, buildPageList, createConfirmStore, createToastStore, useClickOutside };

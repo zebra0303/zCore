@@ -601,11 +601,167 @@ function LinkifiedText({ text, linkClassName }) {
   ) });
 }
 
-// src/client/ui/Card.tsx
+// src/client/ui/Checkbox.tsx
 import React3 from "react";
-import { jsx as jsx8 } from "react/jsx-runtime";
-var Card = React3.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ jsx8(
+import { Check } from "lucide-react";
+import { jsx as jsx8, jsxs as jsxs5 } from "react/jsx-runtime";
+var Checkbox = React3.forwardRef(
+  ({ className, ...props }, ref) => {
+    return /* @__PURE__ */ jsxs5("div", { className: "relative flex items-center", children: [
+      /* @__PURE__ */ jsx8(
+        "input",
+        {
+          type: "checkbox",
+          className: cn(
+            "peer h-4 w-4 shrink-0 rounded-sm border border-gray-900 bg-transparent shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 appearance-none checked:bg-primary checked:border-primary dark:border-gray-500",
+            className
+          ),
+          ref,
+          ...props
+        }
+      ),
+      /* @__PURE__ */ jsx8(Check, { className: "pointer-events-none absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 text-primary-foreground opacity-0 peer-checked:opacity-100" })
+    ] });
+  }
+);
+Checkbox.displayName = "Checkbox";
+
+// src/client/ui/Select.tsx
+import React4 from "react";
+import { ChevronDown } from "lucide-react";
+import { jsx as jsx9, jsxs as jsxs6 } from "react/jsx-runtime";
+var Select = React4.forwardRef(
+  ({ className, children, ...props }, ref) => {
+    return /* @__PURE__ */ jsxs6("div", { className: "relative", children: [
+      /* @__PURE__ */ jsx9(
+        "select",
+        {
+          className: cn(
+            "flex h-10 w-full appearance-none rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-primary",
+            className
+          ),
+          ref,
+          ...props,
+          children
+        }
+      ),
+      /* @__PURE__ */ jsx9(ChevronDown, { className: "pointer-events-none absolute right-3 top-3 h-4 w-4 text-gray-500 opacity-50 dark:text-gray-400" })
+    ] });
+  }
+);
+Select.displayName = "Select";
+
+// src/client/ui/ToggleSwitch.tsx
+import { jsx as jsx10 } from "react/jsx-runtime";
+function ToggleSwitch({ checked, onToggle, label, size = "md", className, ...props }) {
+  const isMd = size === "md";
+  return /* @__PURE__ */ jsx10(
+    "button",
+    {
+      type: "button",
+      role: "switch",
+      "aria-checked": checked,
+      "aria-label": label,
+      onClick: onToggle,
+      className: cn(
+        "relative rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+        checked ? "bg-primary" : "bg-gray-200 dark:bg-gray-700",
+        isMd ? "h-6 w-11" : "h-5 w-9",
+        className
+      ),
+      ...props,
+      children: /* @__PURE__ */ jsx10(
+        "span",
+        {
+          className: cn(
+            "absolute top-0.5 rounded-full bg-white transition-transform shadow-sm",
+            isMd ? `h-5 w-5 ${checked ? "translate-x-[20px]" : "translate-x-0.5"}` : `h-4 w-4 ${checked ? "translate-x-[16px]" : "translate-x-0.5"}`
+          )
+        }
+      )
+    }
+  );
+}
+
+// src/client/ui/LazyImage.tsx
+import { useEffect as useEffect3, useRef as useRef2, useState } from "react";
+import { Fragment as Fragment2, jsx as jsx11 } from "react/jsx-runtime";
+function LazyImage({
+  src,
+  alt,
+  className,
+  fallback,
+  objectFit = "cover",
+  priority = false,
+  rootMargin = "200px",
+  srcSet,
+  sizes,
+  style,
+  ...props
+}) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(priority);
+  const [hasError, setHasError] = useState(false);
+  const containerRef = useRef2(null);
+  useEffect3(() => {
+    if (priority || isInView) return;
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin }
+    );
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+    };
+  }, [priority, isInView, rootMargin]);
+  if (hasError && fallback) return /* @__PURE__ */ jsx11(Fragment2, { children: fallback });
+  return /* @__PURE__ */ jsx11(
+    "div",
+    {
+      ref: containerRef,
+      className: cn("relative overflow-hidden bg-gray-100 dark:bg-gray-800", className),
+      style,
+      children: isInView && /* @__PURE__ */ jsx11(
+        "img",
+        {
+          src,
+          srcSet,
+          sizes,
+          alt,
+          fetchPriority: priority ? "high" : "auto",
+          loading: priority ? "eager" : "lazy",
+          decoding: priority ? "sync" : "async",
+          className: cn(
+            "block w-full transition-opacity duration-500",
+            style?.aspectRatio ? "h-full" : "h-auto",
+            objectFit === "contain" ? "object-contain" : objectFit === "contain-mobile" ? "object-contain md:object-cover" : "object-cover",
+            isLoaded ? "opacity-100" : "opacity-0"
+          ),
+          onLoad: () => {
+            setIsLoaded(true);
+          },
+          onError: () => {
+            setHasError(true);
+          },
+          ...props
+        }
+      )
+    }
+  );
+}
+
+// src/client/ui/Card.tsx
+import React6 from "react";
+import { jsx as jsx12 } from "react/jsx-runtime";
+var Card = React6.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ jsx12(
     "div",
     {
       ref,
@@ -615,27 +771,27 @@ var Card = React3.forwardRef(
   )
 );
 Card.displayName = "Card";
-var CardHeader = React3.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ jsx8("div", { ref, className: cn("flex flex-col space-y-1.5 p-6", className), ...props })
+var CardHeader = React6.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ jsx12("div", { ref, className: cn("flex flex-col space-y-1.5 p-6", className), ...props })
 );
 CardHeader.displayName = "CardHeader";
-var CardTitle = React3.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx8("h3", { ref, className: cn("leading-none font-semibold tracking-tight", className), ...props }));
+var CardTitle = React6.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx12("h3", { ref, className: cn("leading-none font-semibold tracking-tight", className), ...props }));
 CardTitle.displayName = "CardTitle";
-var CardContent = React3.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ jsx8("div", { ref, className: cn("p-6 pt-0", className), ...props })
+var CardContent = React6.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ jsx12("div", { ref, className: cn("p-6 pt-0", className), ...props })
 );
 CardContent.displayName = "CardContent";
-var CardFooter = React3.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ jsx8("div", { ref, className: cn("flex items-center p-6 pt-0", className), ...props })
+var CardFooter = React6.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ jsx12("div", { ref, className: cn("flex items-center p-6 pt-0", className), ...props })
 );
 CardFooter.displayName = "CardFooter";
 
 // src/client/ui/Input.tsx
-import React4 from "react";
-import { jsx as jsx9 } from "react/jsx-runtime";
-var Input = React4.forwardRef(
+import React7 from "react";
+import { jsx as jsx13 } from "react/jsx-runtime";
+var Input = React7.forwardRef(
   ({ className, type = "text", ...props }, ref) => {
-    return /* @__PURE__ */ jsx9(
+    return /* @__PURE__ */ jsx13(
       "input",
       {
         type,
@@ -652,11 +808,11 @@ var Input = React4.forwardRef(
 Input.displayName = "Input";
 
 // src/client/ui/Textarea.tsx
-import React5 from "react";
-import { jsx as jsx10 } from "react/jsx-runtime";
-var Textarea = React5.forwardRef(
+import React8 from "react";
+import { jsx as jsx14 } from "react/jsx-runtime";
+var Textarea = React8.forwardRef(
   ({ className, ...props }, ref) => {
-    return /* @__PURE__ */ jsx10(
+    return /* @__PURE__ */ jsx14(
       "textarea",
       {
         className: cn(
@@ -672,9 +828,9 @@ var Textarea = React5.forwardRef(
 Textarea.displayName = "Textarea";
 
 // src/client/ui/Badge.tsx
-import { jsx as jsx11 } from "react/jsx-runtime";
+import { jsx as jsx15 } from "react/jsx-runtime";
 function Badge({ className, variant = "default", ...props }) {
-  return /* @__PURE__ */ jsx11(
+  return /* @__PURE__ */ jsx15(
     "span",
     {
       className: cn(
@@ -700,14 +856,18 @@ export {
   CardFooter,
   CardHeader,
   CardTitle,
+  Checkbox,
   ConfirmModal,
   Input,
+  LazyImage,
   LinkifiedText,
   Modal,
   Pagination,
+  Select,
   Skeleton,
   Textarea,
   ToastContainer,
+  ToggleSwitch,
   buildPageList,
   createConfirmStore,
   createToastStore,
