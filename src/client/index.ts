@@ -21,6 +21,10 @@ export { Pagination, buildPageList, type PaginationProps } from "./ui/Pagination
 export { ToastContainer, type ToastContainerProps } from "./ui/ToastContainer.js";
 export { ConfirmModal, type ConfirmModalProps } from "./ui/ConfirmModal.js";
 export { LinkifiedText, type LinkifiedTextProps } from "./ui/LinkifiedText.js";
+export { Checkbox, type CheckboxProps } from "./ui/Checkbox.js";
+export { Select, type SelectProps } from "./ui/Select.js";
+export { ToggleSwitch, type ToggleSwitchProps } from "./ui/ToggleSwitch.js";
+export { LazyImage, type LazyImageProps } from "./ui/LazyImage.js";
 
 // Extracted Shared UI Components
 export { Button, type ButtonProps } from "./ui/Button.js";
