@@ -408,10 +408,7 @@ function Pagination({
             {
               className: cn(
                 baseBtn,
-                page === currentPage ? cn(
-                  "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900",
-                  activeButtonClassName
-                ) : buttonClassName
+                page === currentPage ? cn("bg-primary text-primary-foreground", activeButtonClassName) : buttonClassName
               ),
               onClick: () => {
                 onPageChange(page);
