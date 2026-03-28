@@ -21,7 +21,7 @@
 
 클라이언트 단(웹 브라우저)에서 사용되는 React 기반 모음입니다.
 
-- **UI 컴포넌트 (`src/client/ui/`)**: `Button`, `Card`, `Input`, `Textarea`, `Badge`, `Skeleton`, `Pagination`, `ConfirmModal`, `Modal`, `ToastContainer` 등 FSD(Feature-Sliced Design) 패턴에 적용하기 쉽도록 순수 React와 `clsx`를 통한 커스터마이징 가능한 컴포넌트 위주로 구현되어 있습니다. 외부 의존성을 최소화하여 호환성을 높였습니다.
+- **UI 컴포넌트 (`src/client/ui/`)**: `Button`, `Card`, `Input`, `Textarea`, `Badge`, `Skeleton`, `Pagination`, `ConfirmModal`, `Modal`, `ToastContainer`, `Checkbox`, `Select`, `ToggleSwitch`, `LazyImage` 등 FSD(Feature-Sliced Design) 패턴에 적용하기 쉽도록 순수 React와 `clsx`를 통한 커스터마이징 가능한 컴포넌트 위주로 구현되어 있습니다. 외부 의존성을 최소화하여 호환성을 높였습니다.
 - **API 클라이언트 (`src/client/api/ApiClient.ts`)**: `fetch` API 기반의 경량화된 통합 HTTP 클라이언트입니다. 재시도 로직, 401 Unauthorized 오류 공통 처리, 일관된 JSON 에러 파싱 기능을 내장하고 있습니다.
 - **스토어 팩토리 (`src/client/stores/`)**: 모노레포 혹은 멀티 프로젝트 환경에서 스토어 인스턴스가 오염되지 않도록 `createToastStore`, `createConfirmStore` 등의 Zustand 스토어 팩토리 함수를 제공합니다.
 

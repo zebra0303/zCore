@@ -25,7 +25,7 @@ Framework-agnostic utilities that can run in any environment (Client, Server, Ed
 
 Client-side specific logic and React UI components.
 
-- **UI Components**: `Button`, `Card`, `Input`, `Textarea`, `Badge`, `Modal`, `ToastContainer`, `Pagination`, `Skeleton`, `ConfirmModal`, `LinkifiedText`.
+- **UI Components**: `Button`, `Card`, `Input`, `Textarea`, `Badge`, `Modal`, `ToastContainer`, `Pagination`, `Skeleton`, `ConfirmModal`, `LinkifiedText`, `Checkbox`, `Select`, `ToggleSwitch`, `LazyImage`.
 - **State Management**: Zustand store factories (`createToastStore`, `createConfirmStore`) for isolated instances.
 - **Hooks**: Common React hooks like `useClickOutside`.
 - **API Client**: `ApiClient` for centralized HTTP requests and error parsing.
