@@ -34,7 +34,7 @@ export function buildPageList(
 }
 
 const baseBtn =
-  "inline-flex h-8 w-8 items-center justify-center rounded-md border text-sm transition-colors disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex h-9 w-9 items-center justify-center rounded-lg border text-sm transition-all disabled:pointer-events-none disabled:opacity-50";
 
 export function Pagination({
   currentPage,
@@ -51,10 +51,14 @@ export function Pagination({
   return (
     <nav
       aria-label={`Page ${currentPage} of ${totalPages}`}
-      className={cn("flex items-center justify-center gap-1", className)}
+      className={cn("flex items-center justify-center gap-2", className)}
     >
       <button
-        className={cn(baseBtn, buttonClassName)}
+        className={cn(
+          baseBtn,
+          "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
+          buttonClassName,
+        )}
         disabled={currentPage === 1}
         onClick={() => {
           onPageChange(currentPage - 1);
@@ -66,7 +70,10 @@ export function Pagination({
 
       {pages.map((page, i) =>
         page === "..." ? (
-          <span key={`e-${i}`} className="px-2 text-gray-400">
+          <span
+            key={`e-${i}`}
+            className="text-muted-foreground flex h-9 w-9 items-center justify-center"
+          >
             ...
           </span>
         ) : (
@@ -75,8 +82,14 @@ export function Pagination({
             className={cn(
               baseBtn,
               page === currentPage
-                ? cn("bg-primary text-primary-foreground", activeButtonClassName)
-                : buttonClassName,
+                ? cn(
+                    "border-primary bg-primary text-primary-foreground scale-105 font-bold shadow-sm",
+                    activeButtonClassName,
+                  )
+                : cn(
+                    "border-border text-muted-foreground hover:border-muted-foreground/30 hover:bg-muted hover:text-foreground",
+                    buttonClassName,
+                  ),
             )}
             onClick={() => {
               onPageChange(page);
@@ -89,7 +102,11 @@ export function Pagination({
       )}
 
       <button
-        className={cn(baseBtn, buttonClassName)}
+        className={cn(
+          baseBtn,
+          "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
+          buttonClassName,
+        )}
         disabled={currentPage === totalPages}
         onClick={() => {
           onPageChange(currentPage + 1);

@@ -373,7 +373,7 @@ function buildPageList(currentPage, totalPages, delta = 2) {
   }
   return pages;
 }
-var baseBtn = "inline-flex h-8 w-8 items-center justify-center rounded-md border text-sm transition-colors disabled:pointer-events-none disabled:opacity-50";
+var baseBtn = "inline-flex h-9 w-9 items-center justify-center rounded-lg border text-sm transition-all disabled:pointer-events-none disabled:opacity-50";
 function Pagination({
   currentPage,
   totalPages,
@@ -388,12 +388,16 @@ function Pagination({
     "nav",
     {
       "aria-label": `Page ${currentPage} of ${totalPages}`,
-      className: cn("flex items-center justify-center gap-1", className),
+      className: cn("flex items-center justify-center gap-2", className),
       children: [
         /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
           "button",
           {
-            className: cn(baseBtn, buttonClassName),
+            className: cn(
+              baseBtn,
+              "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
+              buttonClassName
+            ),
             disabled: currentPage === 1,
             onClick: () => {
               onPageChange(currentPage - 1);
@@ -403,12 +407,25 @@ function Pagination({
           }
         ),
         pages.map(
-          (page, i) => page === "..." ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "px-2 text-gray-400", children: "..." }, `e-${i}`) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+          (page, i) => page === "..." ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+            "span",
+            {
+              className: "text-muted-foreground flex h-9 w-9 items-center justify-center",
+              children: "..."
+            },
+            `e-${i}`
+          ) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
             "button",
             {
               className: cn(
                 baseBtn,
-                page === currentPage ? cn("bg-primary text-primary-foreground", activeButtonClassName) : buttonClassName
+                page === currentPage ? cn(
+                  "border-primary bg-primary text-primary-foreground scale-105 font-bold shadow-sm",
+                  activeButtonClassName
+                ) : cn(
+                  "border-border text-muted-foreground hover:border-muted-foreground/30 hover:bg-muted hover:text-foreground",
+                  buttonClassName
+                )
               ),
               onClick: () => {
                 onPageChange(page);
@@ -422,7 +439,11 @@ function Pagination({
         /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
           "button",
           {
-            className: cn(baseBtn, buttonClassName),
+            className: cn(
+              baseBtn,
+              "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
+              buttonClassName
+            ),
             disabled: currentPage === totalPages,
             onClick: () => {
               onPageChange(currentPage + 1);
