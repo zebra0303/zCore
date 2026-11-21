@@ -41,7 +41,7 @@
   ],
   "scripts": {
     "hooks": "husky",
-    "build": "npm run clean && tsup",
+    "bundle": "npm run clean && tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

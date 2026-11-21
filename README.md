@@ -91,8 +91,8 @@ function handleRequest(req) {
 # Install dependencies
 npm install
 
-# Build the library
-npm run build
+# Build the library (named `bundle` instead of `build` so npm 12 uses prebuilt dist/ without nested git-dep prepare)
+npm run bundle
 
 # Run tests
 npm run test
