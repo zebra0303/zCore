@@ -1,5 +1,6 @@
 import { defineConfig } from "tsup";
 
+// Avoid parallel clean race by cleaning dist before invoking tsup in npm run build
 export default defineConfig([
   {
     entry: {
@@ -8,7 +9,6 @@ export default defineConfig([
     format: ["esm", "cjs"],
     dts: true,
     sourcemap: true,
-    clean: true,
     outDir: "dist",
   },
   {
@@ -18,7 +18,8 @@ export default defineConfig([
     format: ["esm", "cjs"],
     dts: true,
     sourcemap: true,
-    external: ["react", "react-dom", "zustand", "lucide-react"],
+    // Keep React JSX runtime external alongside peer dependencies
+    external: ["react", "react-dom", "react/jsx-runtime", "zustand", "lucide-react"],
     outDir: "dist",
   },
   {

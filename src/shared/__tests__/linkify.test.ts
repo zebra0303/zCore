@@ -51,4 +51,12 @@ describe("parseLinkSegments", () => {
     const result = parseLinkSegments("use ftp://example.com here");
     expect(result).toEqual([{ text: "use ftp://example.com here", isUrl: false }]);
   });
+
+  it("strips trailing punctuation while keeping balanced parentheses", () => {
+    expect(parseLinkSegments("See (https://example.com/a_(b)).")).toEqual([
+      { text: "See (", isUrl: false },
+      { text: "https://example.com/a_(b)", isUrl: true },
+      { text: ").", isUrl: false },
+    ]);
+  });
 });

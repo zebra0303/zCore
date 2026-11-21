@@ -49,4 +49,9 @@ describe("formatDateShort", () => {
     const result = formatDateShort("2026-03-09", "en");
     expect(result).not.toMatch(/\s/);
   });
+
+  it("returns empty string for invalid date strings without throwing", () => {
+    expect(formatDate("not-a-date", "en")).toBe("");
+    expect(formatDateShort("not-a-date", "ko")).toBe("");
+  });
 });

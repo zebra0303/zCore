@@ -16,6 +16,7 @@
     "rootDir": "./src",
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
+    "isolatedModules": true,
     "jsx": "react-jsx"
   },
   "include": ["src"],

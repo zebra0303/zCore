@@ -41,6 +41,11 @@ describe("createSlug", () => {
   it("preserves Hangul consonants and vowels (jamo)", () => {
     expect(createSlug("ㄱㄴㄷ ㅏㅓㅗ")).toBe("ㄱㄴㄷ-ㅏㅓㅗ");
   });
+
+  it("normalizes macOS NFD decomposed Hangul to NFC", () => {
+    const nfd = "한글 제목".normalize("NFD");
+    expect(createSlug(nfd)).toBe("한글-제목");
+  });
 });
 
 describe("createUniqueSlug", () => {

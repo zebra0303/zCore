@@ -1,49 +1,69 @@
-import { describe, it, expect } from "vitest";
-import { renderToStaticMarkup } from "react-dom/server";
+// @vitest-environment jsdom
+import { describe, it, expect, vi, afterEach } from "vitest";
+import { render, fireEvent, cleanup } from "@testing-library/react";
 import { ConfirmModal } from "../ConfirmModal.js";
 
 describe("ConfirmModal", () => {
+  afterEach(() => {
+    cleanup();
+  });
+
   const defaultProps = {
     isOpen: true,
     title: "Delete Item",
     message: "Are you sure?",
-    onConfirm: () => {},
-    onCancel: () => {},
+    onConfirm: vi.fn(),
+    onCancel: vi.fn(),
   };
 
   it("renders nothing when isOpen is false", () => {
-    const html = renderToStaticMarkup(<ConfirmModal {...defaultProps} isOpen={false} />);
-    expect(html).toBe("");
+    const { queryByRole } = render(<ConfirmModal {...defaultProps} isOpen={false} />);
+    expect(queryByRole("dialog")).toBeNull();
   });
 
-  it("renders modal when isOpen is true", () => {
-    const html = renderToStaticMarkup(<ConfirmModal {...defaultProps} />);
-    expect(html).toContain("Delete Item");
-    expect(html).toContain("Are you sure?");
+  it("renders modal with accessible dialog attributes when isOpen is true", () => {
+    const { getByRole, getByText } = render(<ConfirmModal {...defaultProps} />);
+    const dialog = getByRole("dialog");
+    expect(dialog.getAttribute("aria-modal")).toBe("true");
+    expect(dialog.getAttribute("aria-labelledby")).toBeTruthy();
+    expect(dialog.getAttribute("aria-describedby")).toBeTruthy();
+    expect(getByText("Delete Item")).toBeTruthy();
+    expect(getByText("Are you sure?")).toBeTruthy();
   });
 
-  it("has role=dialog and aria-modal", () => {
-    const html = renderToStaticMarkup(<ConfirmModal {...defaultProps} />);
-    expect(html).toContain('role="dialog"');
-    expect(html).toContain('aria-modal="true"');
-  });
-
-  it("renders confirm and cancel buttons", () => {
-    const html = renderToStaticMarkup(<ConfirmModal {...defaultProps} />);
-    expect(html).toContain("Confirm");
-    expect(html).toContain("Cancel");
-  });
-
-  it("uses custom button labels", () => {
-    const html = renderToStaticMarkup(
-      <ConfirmModal {...defaultProps} confirmLabel="Yes" cancelLabel="No" />,
+  it("calls ONLY onConfirm when confirm button is clicked (not onCancel)", () => {
+    const onConfirm = vi.fn();
+    const onCancel = vi.fn();
+    const { getByText } = render(
+      <ConfirmModal {...defaultProps} onConfirm={onConfirm} onCancel={onCancel} />,
     );
-    expect(html).toContain("Yes");
-    expect(html).toContain("No");
+
+    fireEvent.click(getByText("Confirm"));
+    expect(onConfirm).toHaveBeenCalledTimes(1);
+    expect(onCancel).not.toHaveBeenCalled();
   });
 
-  it("applies variant styles", () => {
-    const html = renderToStaticMarkup(<ConfirmModal {...defaultProps} variant="warning" />);
-    expect(html).toContain("text-amber-600");
+  it("calls onCancel on Cancel click, backdrop click, and Escape key", () => {
+    const onCancel = vi.fn();
+    const { getByText, getByRole } = render(<ConfirmModal {...defaultProps} onCancel={onCancel} />);
+
+    fireEvent.click(getByText("Cancel"));
+    expect(onCancel).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(getByRole("dialog"));
+    expect(onCancel).toHaveBeenCalledTimes(2);
+
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(onCancel).toHaveBeenCalledTimes(3);
+  });
+
+  it("uses custom button labels and variant styles", () => {
+    const { getByText, container } = render(
+      <ConfirmModal {...defaultProps} confirmLabel="Yes" cancelLabel="No" variant="warning" />,
+    );
+    expect(getByText("Yes")).toBeTruthy();
+    expect(getByText("No")).toBeTruthy();
+    expect(document.body.innerHTML).toContain("text-amber-600");
+    expect(container).toBeTruthy();
   });
 });

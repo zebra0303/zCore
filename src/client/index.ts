@@ -12,10 +12,10 @@ export { createConfirmStore, type ConfirmState } from "./stores/createConfirmSto
 export { useClickOutside } from "./hooks/useClickOutside.js";
 
 // API Client
-export { ApiClient, type ApiClientOptions } from "./api/ApiClient.js";
+export { ApiClient, type ApiClientOptions, type ApiRequestOptions } from "./api/ApiClient.js";
 
 // UI Components
-export { Skeleton } from "./ui/Skeleton.js";
+export { Skeleton, type SkeletonProps } from "./ui/Skeleton.js";
 export { Modal, type ModalProps } from "./ui/Modal.js";
 export { Pagination, buildPageList, type PaginationProps } from "./ui/Pagination.js";
 export { ToastContainer, type ToastContainerProps } from "./ui/ToastContainer.js";
@@ -25,6 +25,7 @@ export { Checkbox, type CheckboxProps } from "./ui/Checkbox.js";
 export { Select, type SelectProps } from "./ui/Select.js";
 export { ToggleSwitch, type ToggleSwitchProps } from "./ui/ToggleSwitch.js";
 export { LazyImage, type LazyImageProps } from "./ui/LazyImage.js";
+export { ErrorBoundary, type ErrorBoundaryProps } from "./ui/ErrorBoundary.js";
 
 // Extracted Shared UI Components
 export { Button, type ButtonProps } from "./ui/Button.js";

@@ -32,20 +32,35 @@ declare class ApiError extends Error {
 }
 
 /**
+ * Extract error message and optional parsed payload from a failed HTTP Response.
+ * Supports flat `{ error: string }`, nested `{ error: { code, message } }` (AppError.toJSON),
+ * `{ message: string }`, HTML `<title>`, and short plain-text bodies.
+ */
+declare function extractResponseError(response: Response, fallback: string): Promise<{
+    message: string;
+    details?: unknown;
+}>;
+/**
  * Parse an error response and throw an ApiError.
- * Attempts to extract a message from JSON body fields: `error`, `message`.
+ * Attempts to extract a message from JSON body fields: `error`, `error.message`, `message`.
  * Falls back to statusText if the body is not JSON.
  */
 declare function handleApiError(response: Response, defaultMessage?: string): Promise<never>;
 
 /**
  * Extract a user-friendly error message from an unknown caught value.
- * Returns the Error's message if available, otherwise the fallback string.
+ * Returns the trimmed Error message if non-empty, otherwise the fallback string.
  */
 declare function getErrorMessage(err: unknown, fallback: string): string;
 
+interface MaskErrorOptions {
+    /** Optional custom logger (defaults to console.error; pass null to silence) */
+    logger?: ((err: unknown) => void) | null;
+    /** When true, masks ApiError instances with HTTP status >= 500 */
+    maskServerErrors?: boolean;
+}
 /**
- * Checks if the given error is a DOMException AbortError or standard Error AbortError.
+ * Checks if the given error is an AbortError (cross-realm safe via name check).
  * Used to filter out cancellation errors from general API failures.
  */
 declare const isAbortError: (err: unknown) => boolean;
@@ -56,8 +71,9 @@ declare const isAbortError: (err: unknown) => boolean;
  *
  * @param err - The original unknown error
  * @param defaultMessage - A safe, user-facing error message
+ * @param options - Optional masking and logging configuration
  */
-declare const createMaskedError: (err: unknown, defaultMessage?: string) => ApiError | DOMException;
+declare const createMaskedError: (err: unknown, defaultMessage?: string, options?: MaskErrorOptions) => ApiError | Error | DOMException;
 
 /**
  * Regex-based Markdown stripper for generating plain text excerpts.
@@ -66,9 +82,8 @@ declare const createMaskedError: (err: unknown, defaultMessage?: string) => ApiE
 declare function stripMarkdown(content: string): string;
 
 /**
- * A simple obfuscation utility to prevent plaintext storage of session data.
- * Note: In a real-world scenario with highly sensitive data, consider using Web Crypto API.
- * For session restoration UX, this basic obfuscation is sufficient to hide it from casual inspection.
+ * Lightweight reversible obfuscation utility to avoid casual plaintext display in browser storage.
+ * @security NOT cryptographically secure. Never use this for passwords, secret keys, JWTs, or PII.
  */
 declare const obfuscate: (data: string) => string;
 /**
@@ -100,25 +115,27 @@ declare function parseLinkSegments(text: string): LinkSegment[];
 
 /**
  * Format a date string as a long date (e.g. "March 9, 2026" or "2026년 3월 9일").
- * @param dateStr - ISO date string or YYYY-MM-DD
+ * Returns empty string for invalid date inputs instead of throwing RangeError.
+ * @param dateStr - ISO date string, YYYY-MM-DD, timestamp, or Date
  * @param locale - BCP 47 locale or short code ("en", "ko")
  */
-declare function formatDate(dateStr: string, locale?: string): string;
+declare function formatDate(dateStr: string | number | Date, locale?: string): string;
 /**
  * Format a date string as a short date (e.g. "03/09/2026" or "2026.03.09").
- * @param dateStr - ISO date string or YYYY-MM-DD
+ * Returns empty string for invalid date inputs instead of throwing RangeError.
+ * @param dateStr - ISO date string, YYYY-MM-DD, timestamp, or Date
  * @param locale - BCP 47 locale or short code ("en", "ko")
  */
-declare function formatDateShort(dateStr: string, locale?: string): string;
+declare function formatDateShort(dateStr: string | number | Date, locale?: string): string;
 
 /**
  * Format a date as a relative time string (e.g. "3 hours ago", "2일 전").
- * Falls back to absolute date for very old dates.
- * @param dateStr - ISO date string or YYYY-MM-DD
+ * Returns empty string for invalid dates instead of throwing RangeError.
+ * @param dateStr - ISO date string, YYYY-MM-DD, timestamp, or Date
  * @param locale - BCP 47 locale or short code ("en", "ko")
  * @param now - Current time in ms (defaults to Date.now(), injectable for testing)
  */
-declare function timeAgo(dateStr: string, locale?: string, now?: number): string;
+declare function timeAgo(dateStr: string | number | Date, locale?: string, now?: number): string;
 
 interface ApiResponse<T = unknown> {
     success: boolean;
@@ -141,7 +158,8 @@ interface PaginatedResponse<T> {
     error?: {
         code: string;
         message: string;
+        details?: unknown;
     };
 }
 
-export { ApiError, type ApiResponse, type LinkSegment, type PaginatedResponse, cn, createMaskedError, createSlug, createUniqueSlug, deobfuscate, estimateReadingTime, formatDate, formatDateShort, generateId, getErrorMessage, handleApiError, isAbortError, obfuscate, parseLinkSegments, stripMarkdown, timeAgo };
+export { ApiError, type ApiResponse, type LinkSegment, type MaskErrorOptions, type PaginatedResponse, cn, createMaskedError, createSlug, createUniqueSlug, deobfuscate, estimateReadingTime, extractResponseError, formatDate, formatDateShort, generateId, getErrorMessage, handleApiError, isAbortError, obfuscate, parseLinkSegments, stripMarkdown, timeAgo };

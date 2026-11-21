@@ -125,4 +125,50 @@ describe("ApiClient", () => {
 
     expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/v2/users", expect.anything());
   });
+
+  it("handles 204 No Content without throwing JSON parse error", async () => {
+    mockFetch.mockReturnValue(
+      Promise.resolve({
+        ok: true,
+        status: 204,
+        headers: new Headers(),
+        text: () => Promise.resolve(""),
+      } as Response),
+    );
+    const api = new ApiClient();
+    const res = await api.delete<unknown>("/items/1");
+    expect(res).toBeUndefined();
+  });
+
+  it("parses nested AppError.toJSON error payloads", async () => {
+    mockFetch.mockReturnValue(
+      errorResponse(422, { success: false, error: { code: "VALIDATION", message: "Bad field" } }),
+    );
+    const api = new ApiClient();
+    await expect(api.get("/validate")).rejects.toThrow("Bad field");
+  });
+
+  it("retries idempotent GET on 503 but does not auto-retry POST", async () => {
+    mockFetch
+      .mockReturnValueOnce(errorResponse(503, { error: "Temporary" }))
+      .mockReturnValueOnce(okJson({ ok: true }));
+    const api = new ApiClient({ retries: 1, retryDelay: 1 });
+    const res = await api.get<{ ok: boolean }>("/health");
+    expect(res).toEqual({ ok: true });
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+
+    mockFetch.mockReset();
+    mockFetch.mockReturnValue(errorResponse(503, { error: "Temporary" }));
+    await expect(api.post("/orders", { qty: 1 })).rejects.toThrow("Temporary");
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("preserves falsy JSON bodies such as false and 0", async () => {
+    mockFetch.mockReturnValue(okJson({ ok: true }));
+    const api = new ApiClient();
+    await api.patch("/flag", false);
+    const [, opts] = mockFetch.mock.calls[0]!;
+    expect(opts.method).toBe("PATCH");
+    expect(opts.body).toBe("false");
+  });
 });

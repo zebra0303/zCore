@@ -32,9 +32,13 @@ export function stripMarkdown(content: string): string {
   // Remove GitHub alerts ([!NOTE], [!TIP], etc.)
   text = text.replace(/\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/gi, "");
 
-  // Remove bold/italic (**text**, __text__, *text*, _text_)
+  // Remove strikethrough (~~text~~)
+  text = text.replace(/~~(.*?)~~/g, "$1");
+
+  // Remove bold/italic (**text**, __text__, *text*, _text_) without corrupting snake_case identifiers
   text = text.replace(/(\*\*|__)(.*?)\1/g, "$2");
-  text = text.replace(/(\*|_)(.*?)\1/g, "$2");
+  text = text.replace(/\*(.*?)\*/g, "$1");
+  text = text.replace(/(?<!\w)_(.*?)_(?!\w)/g, "$1");
 
   // Remove inline code (`code`)
   text = text.replace(/`([^`]+)`/g, "$1");
@@ -42,8 +46,8 @@ export function stripMarkdown(content: string): string {
   // Remove horizontal rules (---, ***, ___)
   text = text.replace(/^[-*_]{3,}\s*$/gm, "");
 
-  // Remove list markers (- item, * item, + item, 1. item)
-  text = text.replace(/^[\s-]*[-+*]\s+/gm, "");
+  // Remove list markers (- item, * item, + item, 1. item); avoid overlapping '-' class to prevent ReDoS
+  text = text.replace(/^\s*[-+*]\s+/gm, "");
   text = text.replace(/^\s*\d+\.\s+/gm, "");
 
   // Remove table rows (lines starting with |)

@@ -5,7 +5,11 @@
  * @param fallback - Fallback slug when text produces empty result (default: "untitled")
  */
 export function createSlug(text: string, fallback = "untitled"): string {
+  // Guard against empty or non-string inputs and normalize NFD Hangul (macOS/Safari) to NFC
+  if (!text) return fallback;
+
   const slug = text
+    .normalize("NFC")
     .toLowerCase()
     .trim()
     .replace(/[^\w\s가-힣ㄱ-ㅎㅏ-ㅣ-]/g, "")
@@ -28,10 +32,12 @@ export function createUniqueSlug(
   fallback = "untitled",
 ): string {
   const base = createSlug(text, fallback);
-  if (!existingSlugs.includes(base)) return base;
+  // Use a Set for O(1) collision lookups instead of repeated O(n) array scans
+  const existingSet = new Set(existingSlugs);
+  if (!existingSet.has(base)) return base;
 
   let counter = 2;
-  while (existingSlugs.includes(`${base}-${counter}`)) {
+  while (existingSet.has(`${base}-${counter}`)) {
     counter++;
   }
   return `${base}-${counter}`;

@@ -20,5 +20,7 @@ export interface PaginatedResponse<T> {
   error?: {
     code: string;
     message: string;
+    // Align error payload shape with ApiResponse
+    details?: unknown;
   };
 }

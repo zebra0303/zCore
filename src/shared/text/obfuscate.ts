@@ -1,7 +1,6 @@
 /**
- * A simple obfuscation utility to prevent plaintext storage of session data.
- * Note: In a real-world scenario with highly sensitive data, consider using Web Crypto API.
- * For session restoration UX, this basic obfuscation is sufficient to hide it from casual inspection.
+ * Lightweight reversible obfuscation utility to avoid casual plaintext display in browser storage.
+ * @security NOT cryptographically secure. Never use this for passwords, secret keys, JWTs, or PII.
  */
 export const obfuscate = (data: string): string => {
   try {

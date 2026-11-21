@@ -22,9 +22,15 @@ export function buildPageList(
   totalPages: number,
   delta = 2,
 ): (number | "...")[] {
+  if (totalPages <= 0) return [];
+  const safeDelta = Math.max(0, delta);
   const pages: (number | "...")[] = [];
   for (let i = 1; i <= totalPages; i++) {
-    if (i === 1 || i === totalPages || (i >= currentPage - delta && i <= currentPage + delta)) {
+    if (
+      i === 1 ||
+      i === totalPages ||
+      (i >= currentPage - safeDelta && i <= currentPage + safeDelta)
+    ) {
       pages.push(i);
     } else if (pages[pages.length - 1] !== "...") {
       pages.push("...");
@@ -34,7 +40,7 @@ export function buildPageList(
 }
 
 const baseBtn =
-  "inline-flex h-9 w-9 items-center justify-center rounded-lg border text-sm transition-all disabled:pointer-events-none disabled:opacity-50";
+  "focus-visible:ring-ring inline-flex h-9 w-9 items-center justify-center rounded-lg border text-sm transition-all focus-visible:ring-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50";
 
 export function Pagination({
   currentPage,
@@ -50,28 +56,30 @@ export function Pagination({
 
   return (
     <nav
-      aria-label={`Page ${currentPage} of ${totalPages}`}
+      aria-label={`Pagination, page ${currentPage} of ${totalPages}`}
       className={cn("flex items-center justify-center gap-2", className)}
     >
       <button
+        type="button"
         className={cn(
           baseBtn,
           "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
           buttonClassName,
         )}
-        disabled={currentPage === 1}
+        disabled={currentPage <= 1}
         onClick={() => {
-          onPageChange(currentPage - 1);
+          onPageChange(Math.max(1, currentPage - 1));
         }}
         aria-label="Previous page"
       >
-        <ChevronLeft className="h-4 w-4" />
+        <ChevronLeft className="h-4 w-4" aria-hidden="true" />
       </button>
 
       {pages.map((page, i) =>
         page === "..." ? (
           <span
             key={`e-${i}`}
+            aria-hidden="true"
             className="text-muted-foreground flex h-9 w-9 items-center justify-center"
           >
             ...
@@ -79,6 +87,7 @@ export function Pagination({
         ) : (
           <button
             key={page}
+            type="button"
             className={cn(
               baseBtn,
               page === currentPage
@@ -102,18 +111,19 @@ export function Pagination({
       )}
 
       <button
+        type="button"
         className={cn(
           baseBtn,
           "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
           buttonClassName,
         )}
-        disabled={currentPage === totalPages}
+        disabled={currentPage >= totalPages}
         onClick={() => {
-          onPageChange(currentPage + 1);
+          onPageChange(Math.min(totalPages, currentPage + 1));
         }}
         aria-label="Next page"
       >
-        <ChevronRight className="h-4 w-4" />
+        <ChevronRight className="h-4 w-4" aria-hidden="true" />
       </button>
     </nav>
   );

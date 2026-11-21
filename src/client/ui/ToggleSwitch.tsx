@@ -13,43 +13,41 @@ export interface ToggleSwitchProps extends Omit<
 
 /**
  * Reusable toggle switch component with built-in accessibility.
- * Synchronized from zlog project for global use.
  * - sm: h-5 w-9 track, h-4 w-4 thumb
  * - md: h-6 w-11 track, h-5 w-5 thumb (default)
  */
-export function ToggleSwitch({
-  checked,
-  onToggle,
-  label,
-  size = "md",
-  className,
-  ...props
-}: ToggleSwitchProps) {
-  const isMd = size === "md";
+export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProps>(
+  ({ checked, onToggle, label, size = "md", className, ...props }, ref) => {
+    const isMd = size === "md";
 
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      aria-label={label}
-      onClick={onToggle}
-      className={cn(
-        "focus:ring-primary relative rounded-full transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none",
-        checked ? "bg-primary" : "bg-gray-200 dark:bg-gray-700",
-        isMd ? "h-6 w-11" : "h-5 w-9",
-        className,
-      )}
-      {...props}
-    >
-      <span
+    return (
+      <button
+        ref={ref}
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        aria-label={label}
+        onClick={onToggle}
         className={cn(
-          "absolute top-0.5 rounded-full bg-white shadow-sm transition-transform",
-          isMd
-            ? `h-5 w-5 ${checked ? "translate-x-[20px]" : "translate-x-0.5"}`
-            : `h-4 w-4 ${checked ? "translate-x-[16px]" : "translate-x-0.5"}`,
+          "focus-visible:ring-primary relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+          checked ? "bg-primary" : "bg-gray-200 dark:bg-gray-700",
+          isMd ? "h-6 w-11" : "h-5 w-9",
+          className,
         )}
-      />
-    </button>
-  );
-}
+        {...props}
+      >
+        {/* Anchor thumb to left-0 so translate-x shifts cleanly regardless of button text-align */}
+        <span
+          aria-hidden="true"
+          className={cn(
+            "pointer-events-none absolute top-0.5 left-0 block rounded-full bg-white shadow-sm transition-transform",
+            isMd
+              ? cn("h-5 w-5", checked ? "translate-x-5" : "translate-x-0.5")
+              : cn("h-4 w-4", checked ? "translate-x-4" : "translate-x-0.5"),
+          )}
+        />
+      </button>
+    );
+  },
+);
+ToggleSwitch.displayName = "ToggleSwitch";

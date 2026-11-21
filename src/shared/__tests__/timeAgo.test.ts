@@ -64,4 +64,10 @@ describe("timeAgo", () => {
     const result = timeAgo(date, "ko", NOW);
     expect(result).toMatch(/년 전/);
   });
+
+  it("returns empty string on invalid date and rolls up 59.6s to 1 minute ago", () => {
+    expect(timeAgo("invalid-date", "en", NOW)).toBe("");
+    const almostMinute = new Date(NOW - 59_600).toISOString();
+    expect(timeAgo(almostMinute, "en", NOW)).toMatch(/1 minute ago/);
+  });
 });

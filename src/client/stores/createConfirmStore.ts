@@ -19,19 +19,25 @@ export function createConfirmStore(): UseBoundStore<StoreApi<ConfirmState>> {
     message: "",
     resolve: null,
     confirm: (message: string) => {
+      // Prevent dangling promises if confirm() is invoked while another dialog is already open
+      const pendingResolve = get().resolve;
+      if (pendingResolve) {
+        pendingResolve(false);
+      }
       return new Promise<boolean>((resolve) => {
         set({ isOpen: true, message, resolve });
       });
     },
     onConfirm: () => {
       const { resolve } = get();
-      if (resolve) resolve(true);
+      // Reset state before resolving to avoid re-entrancy races
       set({ isOpen: false, resolve: null });
+      if (resolve) resolve(true);
     },
     onCancel: () => {
       const { resolve } = get();
-      if (resolve) resolve(false);
       set({ isOpen: false, resolve: null });
+      if (resolve) resolve(false);
     },
   }));
 }

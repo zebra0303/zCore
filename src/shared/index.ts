@@ -7,9 +7,11 @@ export { createSlug, createUniqueSlug } from "./slug.js";
 export {
   ApiError,
   handleApiError,
+  extractResponseError,
   getErrorMessage,
   createMaskedError,
   isAbortError,
+  type MaskErrorOptions,
 } from "./errors/index.js";
 
 // Text processing

@@ -9,8 +9,7 @@ export interface LinkifiedTextProps {
 }
 
 /**
- * Renders plain text with URLs converted to clickable links.
- * Uses parseLinkSegments (pure function) from shared/text.
+ * Renders plain text with validated http/https URLs converted to clickable links.
  */
 export function LinkifiedText({ text, linkClassName }: LinkifiedTextProps) {
   if (!text) return null;
@@ -27,7 +26,7 @@ export function LinkifiedText({ text, linkClassName }: LinkifiedTextProps) {
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              "font-medium text-blue-600 hover:underline dark:text-blue-400",
+              "font-medium break-words text-blue-600 hover:underline dark:text-blue-400",
               linkClassName,
             )}
             onClick={(e) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "../../shared/cn.js";
 
 export interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
@@ -10,7 +10,6 @@ export interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement
 
 /**
  * Image component with intersection observer lazy loading and LCP optimization.
- * Synchronized from zlog project for global use.
  */
 export function LazyImage({
   src,
@@ -23,15 +22,37 @@ export function LazyImage({
   srcSet,
   sizes,
   style,
+  onLoad,
+  onError,
   ...props
 }: LazyImageProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isInView, setIsInView] = useState(priority);
-  const [hasError, setHasError] = useState(false);
+  const srcKey = `${src ?? ""}|${srcSet ?? ""}`;
+  // Track loaded/error state keyed by srcKey so changing src resets state without an effect
+  const [loadedKey, setLoadedKey] = useState<string | null>(null);
+  const [errorKey, setErrorKey] = useState<string | null>(null);
+  const [observedInView, setObservedInView] = useState(priority);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Only eagerly reveal when IntersectionObserver is missing in a real browser (preserve SSR lazy behavior)
+  const isInView =
+    priority ||
+    observedInView ||
+    (typeof window !== "undefined" && typeof IntersectionObserver === "undefined");
+  const isLoaded = loadedKey === srcKey;
+  const hasError = errorKey === srcKey;
+
+  // Detect images already satisfied from browser cache before onLoad fires
+  const handleImgRef = useCallback(
+    (img: HTMLImageElement | null) => {
+      if (img?.complete && img.naturalWidth > 0) {
+        setLoadedKey(srcKey);
+      }
+    },
+    [srcKey],
+  );
+
   useEffect(() => {
-    if (priority || isInView) return;
+    if (isInView) return;
 
     const el = containerRef.current;
     if (!el) return;
@@ -39,7 +60,7 @@ export function LazyImage({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
-          setIsInView(true);
+          setObservedInView(true);
           observer.disconnect();
         }
       },
@@ -49,18 +70,19 @@ export function LazyImage({
     return () => {
       observer.disconnect();
     };
-  }, [priority, isInView, rootMargin]);
+  }, [isInView, rootMargin]);
 
   if (hasError && fallback) return <>{fallback}</>;
 
   return (
     <div
       ref={containerRef}
-      className={cn("relative overflow-hidden bg-gray-100 dark:bg-gray-800", className)}
+      className={cn("bg-muted relative overflow-hidden", className)}
       style={style}
     >
       {isInView && (
         <img
+          ref={handleImgRef}
           src={src}
           srcSet={srcSet}
           sizes={sizes}
@@ -78,13 +100,16 @@ export function LazyImage({
                 : "object-cover",
             isLoaded ? "opacity-100" : "opacity-0",
           )}
-          onLoad={() => {
-            setIsLoaded(true);
-          }}
-          onError={() => {
-            setHasError(true);
-          }}
           {...props}
+          // Compose consumer callbacks with internal state updates after spreading props
+          onLoad={(e) => {
+            setLoadedKey(srcKey);
+            onLoad?.(e);
+          }}
+          onError={(e) => {
+            setErrorKey(srcKey);
+            onError?.(e);
+          }}
         />
       )}
     </div>

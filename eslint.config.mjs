@@ -39,7 +39,8 @@ export default tseslint.config(
     },
   },
   {
-    files: ["src/client/**/*.{ts,tsx}", "src/shared/**/*.{ts,tsx}"],
+    // Scope React lint rules strictly to browser client code
+    files: ["src/client/**/*.{ts,tsx}"],
     plugins: { react, "react-hooks": reactHooks },
     languageOptions: {
       parserOptions: {

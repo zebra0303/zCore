@@ -5,7 +5,11 @@ export const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDi
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("bg-card text-card-foreground rounded-xl border shadow-sm", className)}
+      // Explicitly specify border-border for Tailwind v4 compatibility
+      className={cn(
+        "bg-card text-card-foreground border-border rounded-xl border shadow-sm",
+        className,
+      )}
       {...props}
     />
   ),
@@ -19,8 +23,9 @@ export const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
 );
 CardHeader.displayName = "CardHeader";
 
+// Match ref element type to rendered <h3> element
 export const CardTitle = React.forwardRef<
-  HTMLParagraphElement,
+  HTMLHeadingElement,
   React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => (
   <h3 ref={ref} className={cn("leading-none font-semibold tracking-tight", className)} {...props} />

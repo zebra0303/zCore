@@ -1,10 +1,18 @@
+import React from "react";
 import { cn } from "../../shared/cn.js";
 
-export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cn("animate-pulse rounded-lg bg-gray-200 dark:bg-gray-700", className)}
-      {...props}
-    />
-  );
-}
+export type SkeletonProps = React.HTMLAttributes<HTMLDivElement>;
+
+export const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        aria-hidden="true"
+        className={cn("bg-muted animate-pulse rounded-lg", className)}
+        {...props}
+      />
+    );
+  },
+);
+Skeleton.displayName = "Skeleton";

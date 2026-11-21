@@ -92,4 +92,15 @@ const x = 1;
     expect(result).not.toContain("**");
     expect(result).not.toContain("const x");
   });
+
+  it("preserves snake_case identifiers and handles strikethrough", () => {
+    expect(stripMarkdown("use foo_bar_baz and ~~old~~")).toBe("use foo_bar_baz and old");
+  });
+
+  it("completes quickly on long repeated hyphen sequences (no ReDoS)", () => {
+    const start = Date.now();
+    const evil = `${"-".repeat(20000)}x`;
+    stripMarkdown(evil);
+    expect(Date.now() - start).toBeLessThan(500);
+  });
 });
