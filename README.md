@@ -17,7 +17,8 @@ Framework-agnostic utilities that can run in any environment (Client, Server, Ed
 - **Text Processing**: `stripMarkdown`, `readingTime`, `linkify`.
 - **Date Utilities**: `formatDate`, `timeAgo`.
 - **Identifiers**: Unique ID generation (`generateId` via `uuidv7`), Slugs (`slug`).
-- **Error Handling**: `ApiError` and `handleApiError` for consistent error structures.
+- **Error Handling**: `ApiError`, `handleApiError`, and `createMaskedError` for consistent error structures and safe UI masking.
+- **Data Obfuscation**: Lightweight `obfuscate` / `deobfuscate` helpers for client storage.
 - **Types**: `ApiResponse`, `PaginatedResponse`.
 - **Styling**: Tailwind CSS class merging utility (`cn` using `clsx` and `tailwind-merge`).
 
@@ -25,16 +26,17 @@ Framework-agnostic utilities that can run in any environment (Client, Server, Ed
 
 Client-side specific logic and React UI components.
 
-- **UI Components**: `Button`, `Card`, `Input`, `Textarea`, `Badge`, `Modal`, `ToastContainer`, `Pagination`, `Skeleton`, `ConfirmModal`, `LinkifiedText`, `Checkbox`, `Select`, `ToggleSwitch`, `LazyImage`.
+- **UI Components**: `Button`, `Card`, `Input`, `Textarea`, `Badge`, `Modal` (native `<dialog>` with StrictMode guard), `ToastContainer`, `Pagination`, `Skeleton`, `ConfirmModal` (portal, focus trap, Escape handling), `ErrorBoundary`, `LinkifiedText`, `Checkbox`, `Select`, `ToggleSwitch`, `LazyImage`.
 - **State Management**: Zustand store factories (`createToastStore`, `createConfirmStore`) for isolated instances.
 - **Hooks**: Common React hooks like `useClickOutside`.
-- **API Client**: `ApiClient` for centralized HTTP requests and error parsing.
+- **API Client**: `ApiClient` for centralized HTTP requests with `credentials`, `retry`, `timeout`, and consistent error parsing.
 
 ### 3. Server (`@zebra/core/server`)
 
 Server-side specific utilities for Node.js environments (Express, Hono, etc.).
 
-- **Error Handling**: Standardized HTTP `AppError` hierarchy (`BadRequestError`, `NotFoundError`, etc.).
+- **Error Handling**: Standardized HTTP `AppError` hierarchy (`BadRequestError`, `UnauthorizedError`, `ForbiddenError`, `NotFoundError`, `ConflictError`, `UnprocessableEntityError`, `TooManyRequestsError`, `InternalServerError`).
+- **Security & Networking**: `resolveJwtSecret` (enforces non-empty JWT secret in production with ephemeral dev fallback), `isPrivateOrReservedIp`, `assertSafeUrl`, and `safeFetch` (DNS + redirect-aware SSRF protection).
 
 ## Installation
 
@@ -106,7 +108,7 @@ npm run format
 
 ### Test Coverage
 
-22 test suites covering 176 tests across shared utilities, UI components, stores, and API client.
+33 test suites covering 226 tests across shared utilities, UI components, error boundaries, stores, API client, JWT secret resolution, and SSRF protection.
 
 ## License
 
