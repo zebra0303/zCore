@@ -40,7 +40,7 @@
     "dist"
   ],
   "scripts": {
-    "prepare": "husky",
+    "hooks": "husky",
     "build": "npm run clean && tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
